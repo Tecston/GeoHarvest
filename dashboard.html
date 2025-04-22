@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoHarvest - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
+<body class="dashboard">
+  <header class="dashboard-header">
+    <div class="logo">
+      <h1>🌾 GeoHarvest</h1>
+    </div>
+    <div class="dashboard-nav">
+      <a href="index.html">Inicio</a>
+      <a href="#" class="active">Dashboard</a>
+      <a href="#">Configuración</a>
+      <a href="#">Mi Cuenta</a>
+    </div>
+  </header>
+
+  <div class="dashboard-main">
+    <aside class="sidebar">
+      <h3>Panel de Control</h3>
+      <nav class="sidebar-nav">
+        <a href="#" class="active">Vista General</a>
+        <a href="#">Predicciones</a>
+        <a href="#">Análisis de Suelo</a>
+        <a href="#">Rentabilidad</a>
+        <a href="#">Cultivos</a>
+        <a href="#">Clima</a>
+        <a href="#">Reportes</a>
+        <a href="#">Alertas</a>
+      </nav>
+      
+      <div class="weather-widget" style="margin-top: 2rem; padding: 1rem; background: var(--light-green); border-radius: 10px;">
+        <h4>Clima en La Barca</h4>
+        <div class="weather-info" style="display: flex; align-items: center; justify-content: center; margin-top: 1rem;">
+          <div style="font-size: 2rem; margin-right: 1rem;">☀️</div>
+          <div>
+            <div style="font-size: 1.5rem; font-weight: bold;">26°C</div>
+            <div style="font-size: 0.9rem;">Despejado</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    
+    <main class="dashboard-content">
+      <h2>Vista General - 22 de abril de 2025</h2>
+      <p>Bienvenido al panel de control de GeoHarvest. Aquí podrás ver el estado actual de tus campos y las predicciones para los próximos días.</p>
+      
+      <div class="widget-grid">
+        <div class="widget">
+          <div class="widget-header">
+            <div class="widget-title">Estado de los Cultivos</div>
+            <div class="widget-actions">
+              <select id="cultivo-selector" style="padding: 0.3rem; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="maiz">Maíz</option>
+                <option value="trigo">Trigo</option>
+                <option value="frijol">Frijol</option>
+              </select>
+            </div>
+          </div>
+          <div class="widget-content">
+            <div class="chart-container">
+              <canvas id="cultivos-chart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <div class="widget">
+          <div class="widget-header">
+            <div class="widget-title">Humedad del Suelo</div>
+            <div class="widget-actions">Últimas 24 horas</div>
+          </div>
+          <div class="widget-content">
+            <div class="chart-container">
+              <canvas id="humedad-chart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <div class="widget">
+          <div class="widget-header">
+            <div class="widget-title">Rendimiento Previsto</div>
+            <div class="widget-actions">
+              <button id="refresh-yield" style="background: var(--primary-color); color: white; border: none; border-radius: 5px; padding: 0.3rem 0.6rem; cursor: pointer;">
+                Actualizar
+              </button>
+            </div>
+          </div>
+          <div class="widget-content">
+            <div style="text-align: center; padding: 1rem;">
+              <div style="font-size: 2.5rem; font-weight: bold; color: var(--primary-color);">
+                <span id="rendimiento-valor">7.8</span> ton/ha
+              </div>
+              <div style="margin-top: 0.5rem; color: green;">
+                <span style="font-size: 1.2rem;">▲ 12%</span> respecto al año anterior
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="widget">
+          <div class="widget-header">
+            <div class="widget-title">Alertas Activas</div>
+          </div>
+          <div class="widget-content">
+            <ul style="list-style: none; padding: 0;">
+              <li style="padding: 0.8rem; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: orange; font-size: 1.2rem;">⚠️</span>
+                <span>Nivel bajo de nitrógeno en Parcela 3</span>
+              </li>
+              <li style="padding: 0.8rem; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: red; font-size: 1.2rem;">🔴</span>
+                <span>Riesgo de plaga en Parcela 1</span>
+              </li>
+              <li style="padding: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: blue; font-size: 1.2rem;">ℹ️</span>
+                <span>Riego programado para mañana</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="widget large-chart">
+        <div class="widget-header">
+          <div class="widget-title">Análisis Satelital de Cultivos</div>
+          <div class="widget-actions">
+            <select id="parcela-selector" style="padding: 0.3rem; border-radius: 5px; border: 1px solid #ccc; margin-right: 0.5rem;">
+              <option value="todas">Todas las parcelas</option>
+              <option value="parcela1">Parcela 1</option>
+              <option value="parcela2">Parcela 2</option>
+              <option value="parcela3">Parcela 3</option>
+            </select>
+            <select id="periodo-selector" style="padding: 0.3rem; border-radius: 5px; border: 1px solid #ccc;">
+              <option value="7dias">Últimos 7 días</option>
+              <option value="30dias">Últimos 30 días</option>
+              <option value="90dias">Últimos 90 días</option>
+            </select>
+          </div>
+        </div>
+        <div class="widget-content">
+          <div class="chart-container" style="height: 300px;">
+            <canvas id="satelite-chart"></canvas>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+        <div class="widget">
+          <div class="widget-header">
+            <div class="widget-title">Predicción de Clima</div>
+          </div>
+          <div class="widget-content">
+            <div style="display: flex; justify-content: space-between; padding: 1rem 0;">
+              <div style="text-align: center; padding: 0.5rem;">
+                <div>Hoy</div>
+                <div style="font-size: 1.5rem; margin: 0.5rem 0;">☀️</div>
+                <div style="font-weight: bold;">26°C</div>
+              </div>
+              <div style="text-align: center; padding: 0.5rem;">
+                <div>Mañana</div>
+                <div style="font-size: 1.5rem; margin: 0.5rem 0;">🌤️</div>
+                <div style="font-weight: bold;">24°C</div>
+              </div>
+              <div style="text-align: center; padding: 0.5rem;">
+                <div>Jueves</div>
+                <div style="font-size: 1.5rem; margin: 0.5rem 0;">🌦️</div>
+                <div style="font-weight: bold;">22°C</div>
+              </div>
+              <div style="text-align: center; padding: 0.5rem;">
+                <div>Viernes</div>
+                <div style="font-size: 1.5rem; margin: 0.5rem 0;">🌧️</div>
+                <div style="font-weight: bold;">20°C</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="widget">
+          <div class="widget-header">
+            <div class="widget-title">Acciones Recomendadas</div>
+          </div>
+          <div class="widget-content">
+            <ul style="list-style: none; padding: 0;">
+              <li style="padding: 0.8rem; border-bottom: 1px solid #eee;">
+                <button style="background: var(--accent-color); color: white; border: none; border-radius: 5px; padding: 0.5rem; width: 100%; text-align: left; cursor: pointer;">
+                  Aplicar fertilizante en Parcela 3
+                </button>
+              </li>
+              <li style="padding: 0.8rem; border-bottom: 1px solid #eee;">
+                <button style="background: var(--accent-color); color: white; border: none; border-radius: 5px; padding: 0.5rem; width: 100%; text-align: left; cursor: pointer;">
+                  Revisar sistema de riego en Parcela 2
+                </button>
+              </li>
+              <li style="padding: 0.8rem;">
+                <button style="background: var(--accent-color); color: white; border: none; border-radius: 5px; padding: 0.5rem; width: 100%; text-align: left; cursor: pointer;">
+                  Planificar cosecha para la próxima semana
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <p>© GeoHarvest 2025 — Construyamos juntos el futuro del agro en México.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Gráfica de estado de cultivos
+      const cultivosChart = new Chart(
+        document.getElementById('cultivos-chart'),
+        {
+          type: 'bar',
+          data: {
+            labels: ['Parcela 1', 'Parcela 2', 'Parcela 3', 'Parcela 4'],
+            datasets: [{
+              label: 'Salud del cultivo (%)',
+              data: [85, 72, 90, 78],
+              backgroundColor: [
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(255, 159, 64, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(153, 102, 255, 0.7)'
+              ],
+              borderColor: [
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(153, 102, 255, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100
+              }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        }
+      );
+
+      // Gráfica de humedad del suelo
+      const humedadChart = new Chart(
+        document.getElementById('humedad-chart'),
+        {
+          type: 'line',
+          data: {
+            labels: ['6:00', '9:00', '12:00', '15:00', '18:00', '21:00', '0:00'],
+            datasets: [{
+              label: 'Humedad (%)',
+              data: [42, 43, 40, 38, 43, 45, 44],
+              fill: true,
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              tension: 0.4
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: false,
+                min: 30,
+                max: 50
+              }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        }
+      );
+
+      // Gráfica satelital
+      const sateliteChart = new Chart(
+        document.getElementById('satelite-chart'),
+        {
+          type: 'line',
+          data: {
+            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
+            datasets: [
+              {
+                label: 'NDVI (Índice de vegetación)',
+                data: [0.3, 0.4, 0.45, 0.5, 0.6, 0.65, 0.7],
+                borderColor: 'rgb(46, 125, 50)',
+                backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                fill: true,
+                tension: 0.4
+              },
+              {
+                label: 'EVI (Índice de vegetación mejorado)',
+                data: [0.25, 0.35, 0.4, 0.48, 0.55, 0.62, 0.65],
+                borderColor: 'rgb(156, 204, 101)',
+                backgroundColor: 'rgba(156, 204, 101, 0.1)',
+                fill: true,
+                tension: 0.4
+              }
+            ]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 1
+              }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        }
+      );
+
+      // Efectos interactivos
+      const refreshYield = document.getElementById('refresh-yield');
+      if (refreshYield) {
+        refreshYield.addEventListener('click', function() {
+          this.disabled = true;
+          this.textContent = 'Actualizando...';
+          
+          // Simular actualización
+          setTimeout(() => {
+            const rendimientoValor = document.getElementById('rendimiento-valor');
+            const newValue = (parseFloat(rendimientoValor.textContent) + Math.random() * 0.3).toFixed(1);
+            
+            // Animación de contador
+            const startValue = parseFloat(rendimientoValor.textContent);
+            const endValue = parseFloat(newValue);
+            const duration = 1000;
+            const steps = 20;
+            const increment = (endValue - startValue) / steps;
+            let currentStep = 0;
+            
+            const animation = setInterval(() => {
+              currentStep++;
+              const currentValue = startValue + (increment * currentStep);
+              rendimientoValor.textContent = currentValue.toFixed(1);
+              
+              if (currentStep >= steps) {
+                clearInterval(animation);
+                refreshYield.disabled = false;
+                refreshYield.textContent = 'Actualizar';
+              }
+            }, duration / steps);
+          }, 1000);
+        });
+      }
+
+      // Actualizaciones dinámicas para selectores
+      document.getElementById('cultivo-selector').addEventListener('change', function() {
+        const selectedCrop = this.value;
+        let datos;
+        
+        if (selectedCrop === 'maiz') {
+          datos = [85, 72, 90, 78];
+        } else if (selectedCrop === 'trigo') {
+          datos = [65, 82, 70, 88];
+        } else if (selectedCrop === 'frijol') {
+          datos = [75, 68, 80, 85];
+        }
+        
+        cultivosChart.data.datasets[0].data = datos;
+        cultivosChart.update();
+      });
+
+      document.getElementById('parcela-selector').addEventListener('change', function() {
+        // Simulación de cambio de datos según la parcela seleccionada
+        const parcelaId = this.value;
+        let factor = 1.0;
+        
+        if (parcelaId === 'parcela1') factor = 1.1;
+        else if (parcelaId === 'parcela2') factor = 0.9;
+        else if (parcelaId === 'parcela3') factor = 1.2;
+        
+        const nuevosDatos = sateliteChart.data.datasets.map(dataset => {
+          return {
+            ...dataset,
+            data: dataset.data.map(val => val * factor)
+          };
+        });
+        
+        sateliteChart.data.datasets = nuevosDatos;
+        sateliteChart.update();
+      });
+
+      // Animación en hover para los widgets
+      document.querySelectorAll('.widget').forEach(widget => {
+        widget.addEventListener('mouseover', function() {
+          this.style.transform = 'translateY(-5px)';
+          this.style.boxShadow = '0 15px 30px rgba(0,0,0,0.1)';
+        });
+        
+        widget.addEventListener('mouseout', function() {
+          this.style.transform = '';
+          this.style.boxShadow = '';
+        });
+      });
+
+      // Simular actualizaciones periódicas de datos
+      setInterval(() => {
+        // Actualizar datos de humedad con ligeras variaciones
+        humedadChart.data.datasets[0].data = humedadChart.data.datasets[0].data.map(val => {
+          return val + (Math.random() * 2 - 1); // Añadir variación de ±1
+        });
+        humedadChart.update();
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
