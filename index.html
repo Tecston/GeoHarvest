@@ -5,211 +5,675 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GeoHarvest - Cultivating Financial Certainty</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- Added ScrollReveal for scroll-triggered animations -->
+  <script src="https://unpkg.com/scrollreveal@4.1.0/dist/scrollreveal.min.js"></script>
+  <!-- Added three.js for immersive background elements -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Added Tilt.js for card hover effects -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js" defer></script>
+  <meta name="theme-color" content="#157A6E">
 </head>
 <body>
-  <header class="header-main">
-    <h1><span class="logo-icon">🌾</span> GeoHarvest</h1>
-    <p>Lo que no ves, te puede costar millones</p>
-    <nav>
-      <a href="#about"><i class="fas fa-info-circle"></i> Sobre Nosotros</a>
-      <a href="#benefits"><i class="fas fa-star"></i> Beneficios</a>
-      <a href="#planes"><i class="fas fa-clipboard-list"></i> Planes</a>
-      <a href="#equipo"><i class="fas fa-users"></i> Equipo</a>
-      <a href="#demo" class="btn-demo"><i class="fas fa-chart-line"></i> Demo</a>
-    </nav>
+  <header class="header-slim">
+    <div class="header-container">
+      <a href="#" class="header-logo">
+        <span class="logo-icon">🌱</span>
+        <h1>GeoHarvest</h1>
+      </a>
+      <div class="mobile-menu-toggle">
+        <span></span><span></span><span></span>
+      </div>
+      <nav class="nav-compact">
+        <a href="#about"><i class="fas fa-info-circle"></i><span>Nosotros</span></a>
+        <a href="#benefits"><i class="fas fa-star"></i><span>Beneficios</span></a>
+        <a href="#planes"><i class="fas fa-clipboard-list"></i><span>Planes</span></a>
+        <a href="#equipo"><i class="fas fa-users"></i><span>Equipo</span></a>
+        <a href="#demo" class="btn-demo"><i class="fas fa-chart-line"></i><span>Demo</span></a>
+      </nav>
+    </div>
   </header>
 
   <main>
     <section class="hero" id="about">
-      <h2>La próxima mala decisión puede costarte una cosecha entera...</h2>
-      <p>GeoHarvest transforma tu campo en inteligencia con datos satelitales.</p>
-      <div class="hero-cta">
-        <button id="dashboardBtn" class="btn-primary">Ver Solución <i class="fas fa-arrow-right"></i></button>
+      <div class="hero-particles"></div>
+      <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+        <h2>La próxima mala decisión puede costarte una cosecha entera...</h2>
+        <p>GeoHarvest transforma tu campo en inteligencia con datos satelitales.</p>
+        <div class="hero-cta">
+          <button id="dashboardBtn" class="btn-primary pulse-animation">
+            Ver Solución <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+      <div class="hero-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
       </div>
     </section>
 
-    <section id="benefits" class="card-grid fade-ready">
-      <h2><i class="fas fa-leaf"></i> Beneficios Clave</h2>
-      <ul>
-        <li class="hover-lift">
-          <span class="benefit-icon"><i class="fas fa-map-marked-alt"></i></span>
-          <div class="benefit-content">
-            <h3>Identificación de zonas productivas óptimas</h3>
-            <p>Localiza con precisión las áreas de mayor rendimiento en tu campo.</p>
+    <section id="benefits" class="card-grid">
+      <div class="section-header" data-aos="fade-up">
+        <h2><i class="fas fa-leaf"></i> Beneficios Clave</h2>
+        <p class="section-subtitle">Transforma tu agricultura con tecnología de vanguardia</p>
+      </div>
+      <ul class="benefits-grid">
+        <li class="benefit-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="card-inner">
+            <div class="card-front">
+              <span class="benefit-icon"><i class="fas fa-map-marked-alt"></i></span>
+              <h3>Identificación de zonas productivas óptimas</h3>
+            </div>
+            <div class="card-back">
+              <p>Localiza con precisión las áreas de mayor rendimiento en tu campo utilizando tecnología satelital avanzada y análisis de datos en tiempo real.</p>
+              <a href="#demo" class="learn-more">Descubrir más <i class="fas fa-arrow-right"></i></a>
+            </div>
           </div>
         </li>
-        <li class="hover-lift">
-          <span class="benefit-icon"><i class="fas fa-satellite"></i></span>
-          <div class="benefit-content">
-            <h3>Predicciones satelitales para reducir riesgos</h3>
-            <p>Anticipa problemas antes de que afecten tu rendimiento.</p>
+        <li class="benefit-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="card-inner">
+            <div class="card-front">
+              <span class="benefit-icon"><i class="fas fa-satellite"></i></span>
+              <h3>Predicciones satelitales para reducir riesgos</h3>
+            </div>
+            <div class="card-back">
+              <p>Anticipa problemas antes de que afecten tu rendimiento con análisis predictivo basado en datos históricos y patrones climáticos actuales.</p>
+              <a href="#demo" class="learn-more">Descubrir más <i class="fas fa-arrow-right"></i></a>
+            </div>
           </div>
         </li>
-        <li class="hover-lift">
-          <span class="benefit-icon"><i class="fas fa-route"></i></span>
-          <div class="benefit-content">
-            <h3>Trazabilidad completa del campo al cliente</h3>
-            <p>Seguimiento de todo el proceso para mayor transparencia.</p>
+        <li class="benefit-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="card-inner">
+            <div class="card-front">
+              <span class="benefit-icon"><i class="fas fa-route"></i></span>
+              <h3>Trazabilidad completa del campo al cliente</h3>
+            </div>
+            <div class="card-back">
+              <p>Seguimiento de todo el proceso para mayor transparencia, desde la siembra hasta la entrega, garantizando calidad y confianza.</p>
+              <a href="#demo" class="learn-more">Descubrir más <i class="fas fa-arrow-right"></i></a>
+            </div>
           </div>
         </li>
-        <li class="hover-lift">
-          <span class="benefit-icon"><i class="fas fa-coins"></i></span>
-          <div class="benefit-content">
-            <h3>Optimización de costos operativos por parcela</h3>
-            <p>Reduce gastos innecesarios y maximiza la eficiencia.</p>
+        <li class="benefit-card" data-aos="fade-up" data-aos-delay="400">
+          <div class="card-inner">
+            <div class="card-front">
+              <span class="benefit-icon"><i class="fas fa-coins"></i></span>
+              <h3>Optimización de costos operativos por parcela</h3>
+            </div>
+            <div class="card-back">
+              <p>Reduce gastos innecesarios y maximiza la eficiencia con análisis detallado de costos y recomendaciones específicas para cada área de cultivo.</p>
+              <a href="#demo" class="learn-more">Descubrir más <i class="fas fa-arrow-right"></i></a>
+            </div>
           </div>
         </li>
-        <li class="hover-lift">
-          <span class="benefit-icon"><i class="fas fa-chart-pie"></i></span>
-          <div class="benefit-content">
-            <h3>Visualización del retorno esperado por cultivo</h3>
-            <p>Planificación financiera precisa basada en datos reales.</p>
+        <li class="benefit-card" data-aos="fade-up" data-aos-delay="500">
+          <div class="card-inner">
+            <div class="card-front">
+              <span class="benefit-icon"><i class="fas fa-chart-pie"></i></span>
+              <h3>Visualización del retorno esperado por cultivo</h3>
+            </div>
+            <div class="card-back">
+              <p>Planificación financiera precisa basada en datos reales, con proyecciones de rentabilidad y análisis comparativo entre diferentes cultivos.</p>
+              <a href="#demo" class="learn-more">Descubrir más <i class="fas fa-arrow-right"></i></a>
+            </div>
           </div>
         </li>
-        <li class="hover-lift">
-          <span class="benefit-icon"><i class="fas fa-brain"></i></span>
-          <div class="benefit-content">
-            <h3>Decisiones basadas en datos, no intuición</h3>
-            <p>Minimiza errores y maximiza resultados con inteligencia artificial.</p>
+        <li class="benefit-card" data-aos="fade-up" data-aos-delay="600">
+          <div class="card-inner">
+            <div class="card-front">
+              <span class="benefit-icon"><i class="fas fa-brain"></i></span>
+              <h3>Decisiones basadas en datos, no intuición</h3>
+            </div>
+            <div class="card-back">
+              <p>Minimiza errores y maximiza resultados con inteligencia artificial que analiza miles de variables para generar recomendaciones precisas.</p>
+              <a href="#demo" class="learn-more">Descubrir más <i class="fas fa-arrow-right"></i></a>
+            </div>
           </div>
         </li>
       </ul>
     </section>
 
-    <section id="planes" class="planes fade-ready">
-      <h2><i class="fas fa-box-open"></i> Beneficios Exclusivos y Planes</h2>
-      <div class="plan hover-lift">
-        <div class="plan-badge">Recomendado</div>
-        <h3>Plan Socio Pionero</h3>
-        <div class="plan-price">$1,063,000 MXN</div>
-        <div class="plan-features">
-          <p>
-            <i class="fas fa-check-circle"></i> Acceso a módulos premium (valor $50,000 MXN)<br>
-            <i class="fas fa-check-circle"></i> Participación en mejoras y funciones personalizadas<br>
-            <i class="fas fa-check-circle"></i> Retorno estimado en menos de 12 meses<br>
-            <i class="fas fa-check-circle"></i> Mención en materiales oficiales<br>
-            <i class="fas fa-check-circle"></i> Precio preferencial en futuras renovaciones
-          </p>
-        </div>
-        <button class="btn-plan">Seleccionar Plan</button>
+    <section id="planes" class="planes-section">
+      <div class="section-header" data-aos="fade-up">
+        <h2><i class="fas fa-box-open"></i> Beneficios Exclusivos y Planes</h2>
+        <p class="section-subtitle">Inversión estratégica para el futuro del agro</p>
       </div>
-      <div class="plan hover-lift">
-        <h3>Términos del Acuerdo</h3>
-        <div class="plan-features">
-          <p>
-            <i class="fas fa-check-circle"></i> Inversión única: $1,063,000 MXN<br>
-            <i class="fas fa-check-circle"></i> MVP funcional en 4 meses<br>
-            <i class="fas fa-check-circle"></i> 3 años de suscripción premium<br>
-            <i class="fas fa-check-circle"></i> Soporte técnico y módulos personalizados incluidos
-          </p>
-        </div>
-        <button class="btn-plan">Ver Detalles</button>
-      </div>
-    </section>
-
-    <section id="sostenibilidad" class="fade-ready">
-      <h2><i class="fas fa-chart-line"></i> Sostenibilidad Financiera</h2>
-      <div class="info-cards">
-        <div class="info-card hover-lift">
-          <div class="info-card-header">Ingresos Trimestrales</div>
-          <div class="info-card-body">
-            <div class="info-card-value">$305,000 MXN</div>
-            <div class="info-card-desc">Con solo 2 clientes base y 1 escalado</div>
+      <div class="planes-container">
+        <div class="plan" data-aos="fade-right" data-aos-delay="100">
+          <div class="plan-ribbon">Recomendado</div>
+          <div class="plan-header">
+            <h3>Plan Socio Pionero</h3>
+            <div class="plan-price">
+              <span class="currency">$</span>
+              <span class="amount">1,063,000</span>
+              <span class="period">MXN</span>
+            </div>
+          </div>
+          <div class="plan-features">
+            <ul>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Acceso a módulos premium<span class="highlight"> (valor $50,000 MXN)</span></span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Participación en mejoras y funciones personalizadas</span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Retorno estimado en menos de <span class="highlight">12 meses</span></span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Mención en materiales oficiales</span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Precio preferencial en futuras renovaciones</span>
+              </li>
+            </ul>
+          </div>
+          <div class="plan-actions">
+            <button class="btn-plan">Seleccionar Plan</button>
+          </div>
+          <div class="plan-popular-badge">
+            <i class="fas fa-crown"></i>
           </div>
         </div>
-        <div class="info-card hover-lift">
-          <div class="info-card-header">Costos Mensuales</div>
-          <div class="info-card-body">
-            <div class="info-card-value">$163,000 MXN</div>
-            <div class="info-card-desc">Autosostenible en 6 meses</div>
+        
+        <div class="plan terms-card" data-aos="fade-left" data-aos-delay="200">
+          <div class="plan-header">
+            <h3>Términos del Acuerdo</h3>
+            <div class="plan-icon">
+              <i class="fas fa-handshake"></i>
+            </div>
+          </div>
+          <div class="plan-features">
+            <ul>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Inversión única: <span class="highlight">$1,063,000 MXN</span></span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span>MVP funcional en <span class="highlight">4 meses</span></span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span>3 años de suscripción premium</span>
+              </li>
+              <li>
+                <i class="fas fa-check-circle"></i>
+                <span>Soporte técnico y módulos personalizados incluidos</span>
+              </li>
+              <li class="guarantee">
+                <i class="fas fa-shield-alt"></i>
+                <span>Garantía de satisfacción de 30 días</span>
+              </li>
+            </ul>
+          </div>
+          <div class="plan-actions">
+            <button class="btn-plan btn-outline">Ver Detalles</button>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="roi" class="fade-ready">
-      <h2><i class="fas fa-chart-bar"></i> Proyección de ROI</h2>
-      <table>
-        <thead>
-          <tr><th>Año</th><th>Ingresos</th><th>ROI</th><th>Clientes</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td>$660,000</td><td>-37.9%</td><td>3 base + 3 escalados</td></tr>
-          <tr><td>2</td><td>$2,210,000</td><td>+13.0%</td><td>14 base + 8 escalados</td></tr>
-          <tr><td>3</td><td>$2,730,000</td><td>+39.5%</td><td>18 base + 10 escalados</td></tr>
-          <tr><td>4</td><td>$3,255,000</td><td>+66.4%</td><td>21 base + 12 escalados</td></tr>
-          <tr><td>5</td><td>$3,915,000</td><td>+100.1%</td><td>24 base + 15 escalados</td></tr>
-        </tbody>
-      </table>
+    <section id="sostenibilidad" class="financial-section">
+      <div class="section-header" data-aos="fade-up">
+        <h2><i class="fas fa-chart-line"></i> Sostenibilidad Financiera</h2>
+        <p class="section-subtitle">Resultados tangibles desde el primer trimestre</p>
+      </div>
+      <div class="metrics-container" data-aos="fade-up" data-aos-delay="200">
+        <div class="metric-card">
+          <div class="metric-icon">
+            <i class="fas fa-hand-holding-usd"></i>
+          </div>
+          <div class="metric-content">
+            <h3>Ingresos Trimestrales</h3>
+            <div class="metric-value count-up" data-target="305000">$305,000 MXN</div>
+            <div class="metric-desc">Con solo 2 clientes base y 1 escalado</div>
+            <div class="metric-progress">
+              <div class="progress-bar" style="width: 65%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <div class="metric-content">
+            <h3>Costos Mensuales</h3>
+            <div class="metric-value count-up" data-target="163000">$163,000 MXN</div>
+            <div class="metric-desc">Autosostenible en 6 meses</div>
+            <div class="metric-progress">
+              <div class="progress-bar" style="width: 40%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">
+            <i class="fas fa-chart-pie"></i>
+          </div>
+          <div class="metric-content">
+            <h3>ROI Anual Proyectado</h3>
+            <div class="metric-value count-up" data-target="39.5">39.5%</div>
+            <div class="metric-desc">A partir del tercer año</div>
+            <div class="metric-progress">
+              <div class="progress-bar" style="width: 75%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="equipo" class="fade-ready">
-      <h2><i class="fas fa-users"></i> Nuestro Equipo</h2>
-      <ul class="team-grid">
-        <li class="team-member hover-lift">
-          <div class="member-avatar">DB</div>
-          <div class="member-name">Daniel Barreras</div>
-          <div class="member-role">Consultant</div>
-        </li>
-        <li class="team-member hover-lift">
-          <div class="member-avatar">JM</div>
-          <div class="member-name">Jesus Medina</div>
-          <div class="member-role">Project Manager</div>
-        </li>
-        <li class="team-member hover-lift">
-          <div class="member-avatar">JC</div>
-          <div class="member-name">Jorge Coronado</div>
-          <div class="member-role">Technical Lead</div>
-        </li>
-        <li class="team-member hover-lift">
-          <div class="member-avatar">ID</div>
-          <div class="member-name">Issa Durán</div>
-          <div class="member-role">Strategy Manager</div>
-        </li>
-        <li class="team-member hover-lift">
-          <div class="member-avatar">AC</div>
-          <div class="member-name">Alejandra Caro</div>
-          <div class="member-role">Field Partnerships</div>
-        </li>
-      </ul>
-      <p class="team-support">Asesoría de expertos de MIT, Oxford y más.</p>
+    <section id="roi" class="roi-section">
+      <div class="section-header" data-aos="fade-up">
+        <h2><i class="fas fa-chart-bar"></i> Proyección de ROI</h2>
+        <p class="section-subtitle">Crecimiento sustentable a 5 años</p>
+      </div>
+      
+      <div class="roi-container" data-aos="fade-up" data-aos-delay="200">
+        <div class="roi-visual">
+          <div class="chart-container">
+            <canvas id="roiChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="roi-table-container">
+          <table class="roi-table">
+            <thead>
+              <tr>
+                <th>Año</th>
+                <th>Ingresos</th>
+                <th>ROI</th>
+                <th>Clientes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="animate-row" data-aos="fade-right" data-aos-delay="100">
+                <td><span class="year-badge">1</span></td>
+                <td>$<span class="count-up" data-target="660000">660,000</span></td>
+                <td class="negative"><span class="count-up" data-target="-37.9">-37.9%</span></td>
+                <td><strong>3</strong> base + <strong>3</strong> escalados</td>
+              </tr>
+              <tr class="animate-row" data-aos="fade-right" data-aos-delay="200">
+                <td><span class="year-badge">2</span></td>
+                <td>$<span class="count-up" data-target="2210000">2,210,000</span></td>
+                <td class="positive"><span class="count-up" data-target="13.0">+13.0%</span></td>
+                <td><strong>14</strong> base + <strong>8</strong> escalados</td>
+              </tr>
+              <tr class="animate-row" data-aos="fade-right" data-aos-delay="300">
+                <td><span class="year-badge">3</span></td>
+                <td>$<span class="count-up" data-target="2730000">2,730,000</span></td>
+                <td class="positive"><span class="count-up" data-target="39.5">+39.5%</span></td>
+                <td><strong>18</strong> base + <strong>10</strong> escalados</td>
+              </tr>
+              <tr class="animate-row" data-aos="fade-right" data-aos-delay="400">
+                <td><span class="year-badge">4</span></td>
+                <td>$<span class="count-up" data-target="3255000">3,255,000</span></td>
+                <td class="positive"><span class="count-up" data-target="66.4">+66.4%</span></td>
+                <td><strong>21</strong> base + <strong>12</strong> escalados</td>
+              </tr>
+              <tr class="animate-row highlight-row" data-aos="fade-right" data-aos-delay="500">
+                <td><span class="year-badge">5</span></td>
+                <td>$<span class="count-up" data-target="3915000">3,915,000</span></td>
+                <td class="positive"><span class="count-up" data-target="100.1">+100.1%</span></td>
+                <td><strong>24</strong> base + <strong>15</strong> escalados</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="roi-note" data-aos="fade-up">
+            <i class="fas fa-info-circle"></i>
+            <p>Las proyecciones se basan en adquisición gradual de clientes y expansión conservadora de servicios.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="demo" class="cta fade-ready">
-      <h2>🚀 Demo Interactivo</h2>
-      <p>Explora nuestro dashboard agrícola con gráficas animadas en tiempo real.</p>
-      <button class="btn-cta">Ver Demo <i class="fas fa-arrow-right"></i></button>
+    <section id="equipo" class="team-section">
+      <div class="section-header" data-aos="fade-up">
+        <h2><i class="fas fa-users"></i> Nuestro Equipo</h2>
+        <p class="section-subtitle">Expertos comprometidos con la transformación agrícola</p>
+      </div>
+      
+      <div class="team-container">
+        <ul class="team-grid">
+          <li class="team-member" data-aos="fade-up" data-aos-delay="100">
+            <div class="member-photo">
+              <div class="member-avatar">DB</div>
+              <div class="member-social">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+              </div>
+            </div>
+            <div class="member-info">
+              <div class="member-name">Daniel Barreras</div>
+              <div class="member-role">Consultant</div>
+              <div class="member-desc">Especialista en análisis de datos agrícolas con 10+ años en el sector.</div>
+            </div>
+          </li>
+          <li class="team-member" data-aos="fade-up" data-aos-delay="200">
+            <div class="member-photo">
+              <div class="member-avatar">JM</div>
+              <div class="member-social">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+              </div>
+            </div>
+            <div class="member-info">
+              <div class="member-name">Jesus Medina</div>
+              <div class="member-role">Project Manager</div>
+              <div class="member-desc">Líder experimentado en proyectos tecnológicos para agronegocios.</div>
+            </div>
+          </li>
+          <li class="team-member" data-aos="fade-up" data-aos-delay="300">
+            <div class="member-photo">
+              <div class="member-avatar">JC</div>
+              <div class="member-social">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+              </div>
+            </div>
+            <div class="member-info">
+              <div class="member-name">Jorge Coronado</div>
+              <div class="member-role">Technical Lead</div>
+              <div class="member-desc">Ingeniero de software con enfoque en soluciones satelitales e IA.</div>
+            </div>
+          </li>
+          <li class="team-member" data-aos="fade-up" data-aos-delay="400">
+            <div class="member-photo">
+              <div class="member-avatar">ID</div>
+              <div class="member-social">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+              </div>
+            </div>
+            <div class="member-info">
+              <div class="member-name">Issa Durán</div>
+              <div class="member-role">Strategy Manager</div>
+              <div class="member-desc">Experta en estrategia de negocios para soluciones agrícolas innovadoras.</div>
+            </div>
+          </li>
+          <li class="team-member" data-aos="fade-up" data-aos-delay="500">
+            <div class="member-photo">
+              <div class="member-avatar">AC</div>
+              <div class="member-social">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+              </div>
+            </div>
+            <div class="member-info">
+              <div class="member-name">Alejandra Caro</div>
+              <div class="member-role">Field Partnerships</div>
+              <div class="member-desc">Coordinadora de alianzas con productores y cooperativas agrícolas.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="team-partners" data-aos="fade-up" data-aos-delay="200">
+        <div class="partner-label">
+          <i class="fas fa-university"></i>
+          <span>Asesoría académica y técnica por expertos de:</span>
+        </div>
+        <div class="partner-logos">
+          <div class="partner-logo">MIT</div>
+          <div class="partner-logo">Oxford</div>
+          <div class="partner-logo">ITESM</div>
+          <div class="partner-logo">Stanford</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo" class="demo-section">
+      <div class="section-header" data-aos="fade-up">
+        <h2><i class="fas fa-rocket"></i> Demo Interactivo</h2>
+        <p class="section-subtitle">Explora nuestro dashboard agrícola con datos en tiempo real</p>
+      </div>
+      <div class="demo-container" data-aos="zoom-in" data-aos-delay="200">
+        <div class="demo-preview">
+          <div class="demo-screen">
+            <div class="demo-toolbar">
+              <span class="demo-dot"></span>
+              <span class="demo-dot"></span>
+              <span class="demo-dot"></span>
+            </div>
+            <div class="demo-content">
+              <img src="assets/dashboard-preview.jpg" alt="Dashboard Preview" class="demo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x500?text=GeoHarvest+Dashboard'">
+              <div class="demo-overlay">
+                <div class="pulse-marker" style="top: 30%; left: 20%;">
+                  <div class="marker-dot"></div>
+                  <div class="marker-pulse"></div>
+                </div>
+                <div class="pulse-marker" style="top: 60%; left: 75%;">
+                  <div class="marker-dot"></div>
+                  <div class="marker-pulse"></div>
+                </div>
+                <div class="demo-info">
+                  <i class="fas fa-info-circle"></i>
+                  <p>Visualiza datos en tiempo real y toma decisiones informadas</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-features">
+            <div class="demo-feature" data-aos="fade-right" data-aos-delay="100">
+              <i class="fas fa-chart-line"></i>
+              <span>Análisis predictivo</span>
+            </div>
+            <div class="demo-feature" data-aos="fade-right" data-aos-delay="200">
+              <i class="fas fa-map-marked-alt"></i>
+              <span>Mapas interactivos</span>
+            </div>
+            <div class="demo-feature" data-aos="fade-right" data-aos-delay="300">
+              <i class="fas fa-cloud-sun-rain"></i>
+              <span>Datos climatológicos</span>
+            </div>
+            <div class="demo-feature" data-aos="fade-right" data-aos-delay="400">
+              <i class="fas fa-mobile-alt"></i>
+              <span>Compatible con móviles</span>
+            </div>
+          </div>
+        </div>
+        <div class="demo-cta" data-aos="fade-up">
+          <button class="btn-cta btn-primary">
+            <span class="btn-text">Solicitar Acceso</span>
+            <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+          </button>
+          <p class="demo-note">Prueba gratuita de 30 días disponible</p>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer>
+  <footer class="footer">
+    <div class="footer-gradient"></div>
     <div class="footer-content">
-      <div class="footer-logo">
-        <h2>🌾 GeoHarvest</h2>
-        <p>Cultivating Financial Certainty</p>
-      </div>
-      <div class="footer-contact">
-        <h3>Contáctanos</h3>
-        <p><i class="fas fa-envelope"></i> info@geoharvest.mx</p>
-        <p><i class="fas fa-phone"></i> +52 (33) 1234-5678</p>
-      </div>
-      <div class="footer-social">
-        <h3>Síguenos</h3>
-        <div class="social-icons">
-          <a href="#"><i class="fab fa-facebook"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-linkedin"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="logo-icon">🌾</span>
+            <h2>GeoHarvest</h2>
+          </div>
+          <p class="footer-tagline">Cultivating Financial Certainty</p>
+          <p class="footer-desc">Transformando la agricultura con tecnología satelital y análisis de datos avanzado.</p>
+          <div class="footer-social">
+            <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-nav">
+          <h3>Navegación</h3>
+          <ul>
+            <li><a href="#about">Sobre Nosotros</a></li>
+            <li><a href="#benefits">Beneficios</a></li>
+            <li><a href="#planes">Planes</a></li>
+            <li><a href="#equipo">Equipo</a></li>
+            <li><a href="#demo">Demo</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-legal">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="#">Términos de Servicio</a></li>
+            <li><a href="#">Política de Privacidad</a></li>
+            <li><a href="#">Cookies</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-contact">
+          <h3>Contáctanos</h3>
+          <ul>
+            <li><i class="fas fa-envelope"></i> info@geoharvest.mx</li>
+            <li><i class="fas fa-phone"></i> +52 (33) 1234-5678</li>
+            <li><i class="fas fa-map-marker-alt"></i> Av. Tecnológico 2421, Monterrey, MX</li>
+          </ul>
+          <div class="newsletter">
+            <h4>Suscríbete</h4>
+            <div class="newsletter-form">
+              <input type="email" placeholder="Tu correo electrónico">
+              <button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© GeoHarvest 2025 — Construyamos juntos el futuro del agro en México.</p>
+      <p>&copy; GeoHarvest 2025 — Construyendo el futuro del agro en México.</p>
+      <div class="footer-apps">
+        <a href="#" class="app-link"><i class="fab fa-apple"></i> App Store</a>
+        <a href="#" class="app-link"><i class="fab fa-google-play"></i> Google Play</a>
+      </div>
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="main.js"></script>
+  <script>
+    // Initialize AOS animation library
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true,
+      mirror: false
+    });
+
+    // Chart.js ROI visualization
+    document.addEventListener('DOMContentLoaded', () => {
+      const ctx = document.getElementById('roiChart');
+      
+      if(ctx) {
+        const roiChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+            datasets: [{
+              label: 'ROI Proyectado',
+              data: [-37.9, 13.0, 39.5, 66.4, 100.1],
+              fill: {
+                target: 'origin',
+                above: 'rgba(75, 192, 192, 0.2)',
+                below: 'rgba(255, 99, 132, 0.2)'
+              },
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 2,
+              pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+              pointBorderColor: '#fff',
+              pointRadius: 6,
+              tension: 0.3
+            },
+            {
+              label: 'Ingresos (MXN)',
+              data: [660000/100000, 2210000/100000, 2730000/100000, 3255000/100000, 3915000/100000],
+              fill: false,
+              borderColor: 'rgba(255, 159, 64, 1)',
+              borderWidth: 2,
+              pointBackgroundColor: 'rgba(255, 159, 64, 1)',
+              pointBorderColor: '#fff',
+              pointRadius: 6,
+              tension: 0.3,
+              yAxisID: 'y1'
+            }]
+          },
+          options: {
+            responsive: true,
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function(value) {
+                    return value + '%';
+                  }
+                },
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                }
+              },
+              y1: {
+                position: 'right',
+                beginAtZero: true,
+                ticks: {
+                  callback: function(value) {
+                    return value + '00k';
+                  }
+                },
+                grid: {
+                  display: false
+                }
+              },
+              x: {
+                grid: {
+                  color: 'rgba(255, 255, 255, 0.1)'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  boxWidth: 12
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    let label = context.dataset.label || '';
+                    if (label) {
+                      label += ': ';
+                    }
+                    if (context.datasetIndex === 0) {
+                      label += context.parsed.y + '%';
+                    } else {
+                      label += '$' + context.parsed.y * 100000;
+                    }
+                    return label;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>

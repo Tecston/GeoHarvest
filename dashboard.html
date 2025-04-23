@@ -3,1125 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - GeoHarvest</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Leaflet para mapas -->
+    <title>GeoHarvest Dashboard</title>
+    
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS CSS para animaciones al hacer scroll (igual que en index) -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    
+    <!-- Estilo personalizado -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Estilos específicos del dashboard -->
+    <style>
+        /* Estilos para mantener coherencia con el index */
+        .dashboard-container {
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .dashboard-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pulse-animation {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .widget {
+            transition: all 0.3s ease;
+        }
+        
+        /* Efectos de degradado como en index */
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 10px;
+            color: white;
+        }
+    </style>
 </head>
-<body class="dashboard">
-    <!-- Header del Dashboard -->
-    <header class="dashboard-header">
-        <button class="toggle-sidebar">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="dashboard-logo">
-            <h1><i class="fas fa-leaf logo-icon"></i> GeoHarvest</h1>
-        </div>
-        <nav class="dashboard-nav">
-            <a href="#" class="active">Dashboard</a>
-            <a href="#">Parcelas</a>
-            <a href="#">Finanzas</a>
-            <a href="#">Reportes</a>
-        </nav>
-        <div class="dashboard-user">
-            <button class="dark-mode-toggle">
-                <i class="fas fa-moon"></i>
-            </button>
-            <div class="user-menu">
-                <div class="user-avatar">
-                    CR
+<body>
+    <!-- Contenedor para partículas Three.js (igual que en index) -->
+    <div class="dashboard-particles" id="particles-background"></div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar navigation -->
+        <aside class="sidebar" data-aos="fade-right" data-aos-duration="800">
+            <div class="logo">
+                <img src="assets/logo.png" alt="GeoHarvest Logo">
+                <h1>GeoHarvest</h1>
+            </div>
+            <nav class="sidebar-menu">
+                <ul>
+                    <li class="active" id="producer-toggle">
+                        <a href="#"><i class="fas fa-tractor"></i> Dashboard Productor</a>
+                    </li>
+                    <li id="bank-toggle">
+                        <a href="#"><i class="fas fa-landmark"></i> Dashboard Financiero</a>
+                    </li>
+                    <li id="buyer-toggle">
+                        <a href="#"><i class="fas fa-store"></i> Dashboard Comprador</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-chart-line"></i> Análisis</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-cog"></i> Configuración</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-question-circle"></i> Ayuda</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <img src="assets/avatar.jpg" alt="User Avatar">
+                    </div>
+                    <div class="user-details">
+                        <h4>Juan Pérez</h4>
+                        <p>Productor</p>
+                    </div>
                 </div>
                 <div class="user-dropdown">
-                    <a href="#"><i class="fas fa-user"></i> Perfil</a>
-                    <a href="#"><i class="fas fa-cog"></i> Configuración</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="index.html"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Contenido principal del Dashboard -->
-    <main class="dashboard-main">
-        <!-- Sidebar con navegación -->
-        <aside class="sidebar">
-            <h3>GeoHarvest</h3>
-            <div class="sidebar-nav">
-                <a href="#" class="active"><i class="fas fa-home"></i> Inicio</a>
-                <a href="#"><i class="fas fa-chart-line"></i> Monitoreo</a>
-                <a href="#"><i class="fas fa-seedling"></i> Cultivos</a>
-                <a href="#"><i class="fas fa-coins"></i> Finanzas</a>
-                <a href="#"><i class="fas fa-truck"></i> Proveedores</a>
-            </div>
-
-            <div class="sidebar-section">
-                <h4>Herramientas</h4>
-                <div class="sidebar-nav">
-                    <a href="#"><i class="fas fa-calculator"></i> Simulador</a>
-                    <a href="#"><i class="fas fa-cloud-sun"></i> Clima</a>
-                    <a href="#"><i class="fas fa-file-export"></i> Exportar</a>
-                    <a href="#"><i class="fas fa-question-circle"></i> Ayuda</a>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <h4>Tipo de usuario</h4>
-                <div class="sidebar-nav">
-                    <a href="#" id="producer-toggle"><i class="fas fa-user-hard-hat"></i> Productor</a>
-                    <a href="#" id="bank-toggle"><i class="fas fa-landmark"></i> Entidad Financiera</a>
-                    <a href="#" id="buyer-toggle"><i class="fas fa-shopping-cart"></i> Comprador</a>
-                </div>
-            </div>
-            
-            <div class="weather-widget">
-                <h4>Pronóstico del Tiempo</h4>
-                <div class="weather-indicators">
-                    <!-- Se llenará con JavaScript -->
+                    <ul>
+                        <li><a href="#"><i class="fas fa-user"></i> Perfil</a></li>
+                        <li><a href="#"><i class="fas fa-cog"></i> Configuración</a></li>
+                        <li><a href="#"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                    </ul>
                 </div>
             </div>
         </aside>
 
-        <!-- Contenido del Dashboard -->
-        <div class="dashboard-content">
-            <!-- Breadcrumb -->
-            <div class="breadcrumb">
-                <a href="#">GeoHarvest</a> / <a href="#">Dashboard</a>
+        <!-- Main content -->
+        <main class="dashboard-content">
+            <!-- Top bar -->
+            <div class="topbar">
+                <button class="toggle-sidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="topbar-title">
+                    Dashboard
+                </div>
+                <div class="topbar-actions">
+                    <button class="notification-button">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="dark-mode-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="parcel-selector-container">
+                        <select id="parcel-selector">
+                            <option value="all">Todas las parcelas</option>
+                            <option value="parcel1">Parcela 1</option>
+                            <option value="parcel2">Parcela 2</option>
+                            <option value="parcel3">Parcela 3</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <!-- Banner de notificaciones -->
-            <div class="notification-banner">
-                <span><i class="fas fa-info-circle"></i> Nuevas recomendaciones de IA disponibles para optimizar tu cultivo.</span>
+            <!-- Notification banner -->
+            <div class="notification-banner pulse-animation">
+                <p><i class="fas fa-info-circle"></i> Bienvenido al nuevo dashboard de GeoHarvest. Explora las nuevas características.</p>
                 <button class="close"><i class="fas fa-times"></i></button>
             </div>
 
-            <!-- Selector de panel -->
-            <div class="panel-selector">
-                <div class="panel-option active" data-panel="producer">
-                    <i class="fas fa-user-hard-hat"></i>
-                    Panel del Productor
+            <!-- Panel selector con efectos hover -->
+            <div class="panel-selector" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+                <div class="panel-option active hover-lift" data-panel="producer">
+                    <i class="fas fa-tractor"></i> Vista Productor
                 </div>
-                <div class="panel-option" data-panel="financial">
-                    <i class="fas fa-chart-pie"></i>
-                    Panel Financiero
+                <div class="panel-option hover-lift" data-panel="bank">
+                    <i class="fas fa-landmark"></i> Vista Financiera
                 </div>
-                <div class="panel-option" data-panel="bank">
-                    <i class="fas fa-landmark"></i>
-                    Panel de Entidad Financiera
-                </div>
-                <div class="panel-option" data-panel="buyer">
-                    <i class="fas fa-shopping-cart"></i>
-                    Panel de Comprador
+                <div class="panel-option hover-lift" data-panel="buyer">
+                    <i class="fas fa-store"></i> Vista Comprador
                 </div>
             </div>
 
-            <!-- Contenido del Panel del Productor -->
-            <div id="producer-panel" class="panel-content active">
-                <!-- Título y acciones del Dashboard -->
-                <div class="dashboard-title">
-                    <h2>Panel del Productor</h2>
-                    <div class="dashboard-actions">
-                        <button class="btn-dashboard">
-                            <i class="fas fa-download"></i> Exportar
-                        </button>
-                        <button class="btn-dashboard btn-primary-dashboard">
-                            <i class="fas fa-plus"></i> Nueva acción
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- KPIs de rendimiento agrícola -->
-                <div class="widget-grid">
-                    <div class="kpi-card slide-in-up" style="animation-delay: 0.1s;">
-                        <div class="kpi-icon green">
-                            <i class="fas fa-dollar-sign"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">$156,000</h4>
-                            <p class="kpi-label">Ingresos mensuales</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> 12% vs mes anterior
+            <!-- Panel content -->
+            <div class="panels-container">
+                <!-- Producer Panel -->
+                <div id="producer-panel" class="panel-content active">
+                    <!-- KPI Cards con animación AOS -->
+                    <div class="kpi-cards">
+                        <div class="kpi-card hover-lift" data-aos="fade-up" data-aos-delay="100">
+                            <h3>52%</h3>
+                            <p class="kpi-label">Humedad promedio</p>
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-up"></i> 3%
                             </div>
                         </div>
-                    </div>
-                    <div class="kpi-card slide-in-up" style="animation-delay: 0.2s;">
-                        <div class="kpi-icon blue">
-                            <i class="fas fa-water"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">15%</h4>
-                            <p class="kpi-label">Ahorro de agua</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> 3% vs mes anterior
+                        <div class="kpi-card hover-lift" data-aos="fade-up" data-aos-delay="200">
+                            <h3>26°C</h3>
+                            <p class="kpi-label">Temperatura</p>
+                            <div class="kpi-trend negative">
+                                <i class="fas fa-arrow-up"></i> 2°C
                             </div>
                         </div>
-                    </div>
-                    <div class="kpi-card slide-in-up" style="animation-delay: 0.3s;">
-                        <div class="kpi-icon orange">
-                            <i class="fas fa-seedling"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">11.4%</h4>
+                        <div class="kpi-card hover-lift" data-aos="fade-up" data-aos-delay="300">
+                            <h3>14.3%</h3>
                             <p class="kpi-label">Aumento en rendimiento</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> 2.1% vs mes anterior
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-up"></i> 2.1%
+                            </div>
+                        </div>
+                        <div class="kpi-card hover-lift" data-aos="fade-up" data-aos-delay="400">
+                            <h3>18%</h3>
+                            <p class="kpi-label">Ahorro de agua</p>
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-up"></i> 4%
                             </div>
                         </div>
                     </div>
-                    <div class="kpi-card slide-in-up" style="animation-delay: 0.4s;">
-                        <div class="kpi-icon green">
-                            <i class="fas fa-leaf"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">18.5 ton</h4>
-                            <p class="kpi-label">Carbono reducido</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> 5% vs mes anterior
+
+                    <!-- First row of widgets -->
+                    <div class="widgets-row">
+                        <div class="widget medium-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-water"></i> Humedad del suelo</h3>
+                                <div class="widget-actions">
+                                    <button class="widget-action"><i class="fas fa-sync-alt"></i></button>
+                                    <button class="widget-action"><i class="fas fa-ellipsis-v"></i></button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Filtros del dashboard -->
-                <div class="filter-bar">
-                    <div class="filters">
-                        <div class="filter-item">
-                            <span class="filter-label">Parcela:</span>
-                            <select class="filter-select" id="parcel-selector">
-                                <option value="all">Todas las parcelas</option>
-                                <option value="parcela1">Parcela 1</option>
-                                <option value="parcela2">Parcela 2</option>
-                                <option value="parcela3">Parcela 3</option>
-                                <option value="parcela4">Parcela 4</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <span class="filter-label">Cultivo:</span>
-                            <select class="filter-select" id="crop-selector">
-                                <option value="all">Todos los cultivos</option>
-                                <option value="maiz">Maíz</option>
-                                <option value="trigo">Trigo</option>
-                                <option value="frijol">Frijol</option>
-                            </select>
-                        </div>
-                        <div class="filter-item date-range">
-                            <span class="filter-label">Periodo:</span>
-                            <select class="filter-select">
-                                <option value="30d">Últimos 30 días</option>
-                                <option value="90d">Últimos 90 días</option>
-                                <option value="6m">Últimos 6 meses</option>
-                                <option value="1y">Último año</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="search-bar">
-                        <input type="text" class="search-input" placeholder="Buscar...">
-                        <button class="btn-dashboard">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Mapa interactivo -->
-                <div class="map-container" id="crop-map">
-                    <div class="map-controls">
-                        <div class="map-control" id="map-zoom-in">
-                            <i class="fas fa-plus"></i>
-                        </div>
-                        <div class="map-control" id="map-zoom-out">
-                            <i class="fas fa-minus"></i>
-                        </div>
-                        <div class="map-control" id="map-locate">
-                            <i class="fas fa-location-arrow"></i>
-                        </div>
-                    </div>
-                    <div class="map-layers">
-                        <div class="map-layer">
-                            <div class="layer-color" style="background: rgba(76, 175, 80, 0.7);"></div>
-                            <span>Humedad óptima</span>
-                        </div>
-                        <div class="map-layer">
-                            <div class="layer-color" style="background: rgba(255, 152, 0, 0.7);"></div>
-                            <span>Humedad baja</span>
-                        </div>
-                        <div class="map-layer">
-                            <div class="layer-color" style="background: rgba(244, 67, 54, 0.7);"></div>
-                            <span>Alerta de plaga</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Widgets de sensores IoT -->
-                <div class="widget-grid">
-                    <!-- Widget de humedad del suelo -->
-                    <div class="widget slide-in-up">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Humedad del suelo</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
                             <div class="chart-container">
                                 <canvas id="humidity-chart"></canvas>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Widget de temperatura -->
-                    <div class="widget slide-in-up" style="animation-delay: 0.1s;">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Temperatura</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
+
+                        <div class="widget medium-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-temperature-high"></i> Temperatura</h3>
+                                <div class="widget-actions">
+                                    <button class="widget-action"><i class="fas fa-sync-alt"></i></button>
+                                    <button class="widget-action"><i class="fas fa-ellipsis-v"></i></button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="widget-content">
                             <div class="chart-container">
                                 <canvas id="temperature-chart"></canvas>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Widget de nivel de nutrientes -->
-                    <div class="widget slide-in-up" style="animation-delay: 0.2s;">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Niveles de nutrientes</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
+
+                    <!-- Second row of widgets -->
+                    <div class="widgets-row">
+                        <div class="widget large-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-map-marked-alt"></i> Mapa de parcelas</h3>
+                                <div class="widget-actions">
+                                    <button id="map-zoom-in" class="widget-action"><i class="fas fa-plus"></i></button>
+                                    <button id="map-zoom-out" class="widget-action"><i class="fas fa-minus"></i></button>
+                                    <button id="map-locate" class="widget-action"><i class="fas fa-location-arrow"></i></button>
+                                </div>
+                            </div>
+                            <div id="crop-map" class="map-container"></div>
+                        </div>
+
+                        <div class="widget small-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-cloud-sun"></i> Clima</h3>
+                                <div class="widget-actions">
+                                    <button class="widget-action"><i class="fas fa-sync-alt"></i></button>
+                                </div>
+                            </div>
+                            <div class="weather-indicators">
+                                <!-- Weather content populated by JS -->
                             </div>
                         </div>
-                        <div class="widget-content">
-                            <div class="chart-container">
+                    </div>
+
+                    <!-- Third row of widgets -->
+                    <div class="widgets-row">
+                        <div class="widget medium-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-seedling"></i> Nutrientes del suelo</h3>
+                                <div class="widget-actions">
+                                    <button class="widget-action"><i class="fas fa-sync-alt"></i></button>
+                                    <button class="widget-action"><i class="fas fa-ellipsis-v"></i></button>
+                                </div>
+                            </div>
+                            <div class="chart-container radar-chart-container">
                                 <canvas id="nutrients-chart"></canvas>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Widget de rendimiento de cultivo -->
-                    <div class="widget slide-in-up" style="animation-delay: 0.3s;">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Rendimiento de cultivo</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="sensor-value">
-                                <div class="value">7.8</div>
-                                <div class="unit">Toneladas por hectárea</div>
-                                <div class="trend up">
-                                    <i class="fas fa-arrow-up"></i> 11.4% vs cosecha anterior
+
+                        <div class="widget medium-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-satellite"></i> Datos satelitales</h3>
+                                <div class="widget-actions">
+                                    <button class="widget-action"><i class="fas fa-sync-alt"></i></button>
+                                    <button class="widget-action"><i class="fas fa-ellipsis-v"></i></button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Gráfica grande de datos satelitales -->
-                <div class="widget large-chart slide-in-up">
-                    <div class="widget-header">
-                        <h3 class="widget-title">Datos satelitales - NDVI y EVI</h3>
-                        <div class="widget-actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </div>
-                    </div>
-                    <div class="widget-content">
-                        <div class="chart-container">
-                            <canvas id="satellite-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Alertas y recomendaciones -->
-                <div class="widget-grid">
-                    <!-- Widget de alertas -->
-                    <div class="widget slide-in-up">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Alertas</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-bell"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="alerts" id="alerts-container">
-                                <!-- Se llenará con JavaScript -->
+                            <div class="chart-container">
+                                <canvas id="satellite-chart"></canvas>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Widget de recomendaciones de IA -->
-                    <div class="widget slide-in-up" style="animation-delay: 0.1s;">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Recomendaciones de IA</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-robot"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="alerts" id="recommendations-container">
-                                <!-- Se llenará con JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Contenido del Panel Financiero -->
-            <div id="financial-panel" class="panel-content">
-                <!-- Título y acciones del Dashboard -->
-                <div class="dashboard-title">
-                    <h2>Panel Financiero</h2>
-                    <div class="dashboard-actions">
-                        <button class="btn-dashboard">
-                            <i class="fas fa-download"></i> Exportar
-                        </button>
-                        <button class="btn-dashboard btn-primary-dashboard">
-                            <i class="fas fa-calculator"></i> Simulador
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- KPIs Financieros -->
-                <div class="widget-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-icon blue">
-                            <i class="fas fa-percentage"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">18.5%</h4>
-                            <p class="kpi-label">TIR</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> 2.3% vs proyección
+                    <!-- Alerts and Recommendations -->
+                    <div class="widgets-row">
+                        <div class="widget medium-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
+                                <span class="badge">3</span>
+                            </div>
+                            <div id="alerts-container" class="alerts-container">
+                                <!-- Alerts populated by JS -->
                             </div>
                         </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon green">
-                            <i class="fas fa-sack-dollar"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">$256,000</h4>
-                            <p class="kpi-label">VAN</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> +$15,000 vs proyección
+
+                        <div class="widget medium-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-brain"></i> Recomendaciones IA</h3>
+                                <span class="badge green">3</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon orange">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">25.4%</h4>
-                            <p class="kpi-label">ROI</p>
-                            <div class="kpi-trend down">
-                                <i class="fas fa-arrow-down"></i> 1.2% vs proyección
-                            </div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon blue">
-                            <i class="fas fa-calendar-day"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">3.2 años</h4>
-                            <p class="kpi-label">Tiempo de recuperación</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> -0.3 años vs proyección
+                            <div id="recommendations-container" class="alerts-container">
+                                <!-- Recommendations populated by JS -->
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Score Crediticio -->
-                <div class="widget large-chart">
-                    <div class="widget-header">
-                        <h3 class="widget-title">Perfil Crediticio</h3>
-                        <div class="widget-actions">
-                            <i class="fas fa-ellipsis-v"></i>
+                <!-- Bank Panel -->
+                <div id="bank-panel" class="panel-content">
+                    <!-- Credit score -->
+                    <div class="kpi-cards">
+                        <div class="kpi-card">
+                            <h3>82/100</h3>
+                            <p class="kpi-label">Puntuación crediticia</p>
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-up"></i> 5
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <h3>$158,342</h3>
+                            <p class="kpi-label">Ingresos mensuales</p>
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-up"></i> 12%
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <h3>$42,500</h3>
+                            <p class="kpi-label">Préstamo disponible</p>
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-up"></i> 8%
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <h3>4.2%</h3>
+                            <p class="kpi-label">Tasa de interés</p>
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-down"></i> 0.5%
+                            </div>
                         </div>
                     </div>
-                    <div class="widget-content">
-                        <div class="widget-grid">
-                            <div class="chart-container" style="height: 200px;">
+
+                    <!-- First row of widgets -->
+                    <div class="widgets-row">
+                        <div class="widget medium-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-chart-pie"></i> Puntuación crediticia</h3>
+                                <div class="widget-actions">
+                                    <button class="widget-action"><i class="fas fa-info-circle"></i></button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
                                 <canvas id="credit-score-chart"></canvas>
                             </div>
-                            <div style="padding: 20px;">
-                                <h4 style="color: var(--primary-color); font-size: 1.25rem; margin-bottom: 1rem;">Calificación crediticia: <span class="badge badge-primary">82/100</span></h4>
-                                <p>Status: <span style="font-weight: bold; color: var(--accent-color);">Excelente</span></p>
-                                <div style="margin-top: 1rem;">
-                                    <h5 style="font-size: 1rem; margin-bottom: 0.5rem;">Factores principales:</h5>
-                                    <div style="margin-bottom: 10px;">
-                                        <div class="progress-label">
-                                            <span>Historial de pagos</span>
-                                            <span>90%</span>
-                                        </div>
-                                        <div class="progress-container">
-                                            <div class="progress-bar" style="width: 90%; background-color: #4CAF50;"></div>
-                                        </div>
-                                    </div>
-                                    <div style="margin-bottom: 10px;">
-                                        <div class="progress-label">
-                                            <span>Utilización de crédito</span>
-                                            <span>75%</span>
-                                        </div>
-                                        <div class="progress-container">
-                                            <div class="progress-bar" style="width: 75%; background-color: #2196F3;"></div>
-                                        </div>
-                                    </div>
-                                    <div style="margin-bottom: 10px;">
-                                        <div class="progress-label">
-                                            <span>Antigüedad de cuentas</span>
-                                            <span>85%</span>
-                                        </div>
-                                        <div class="progress-container">
-                                            <div class="progress-bar" style="width: 85%; background-color: #4CAF50;"></div>
-                                        </div>
-                                    </div>
-                                    <div style="margin-bottom: 10px;">
-                                        <div class="progress-label">
-                                            <span>Diversidad de crédito</span>
-                                            <span>80%</span>
-                                        </div>
-                                        <div class="progress-container">
-                                            <div class="progress-bar" style="width: 80%; background-color: #4CAF50;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Flujo de caja y acceso a créditos -->
-                <div class="widget-grid">
-                    <div class="widget large-chart">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Flujo de caja proyectado</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
+                        <div class="widget medium-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-money-bill-wave"></i> Oportunidades financieras</h3>
                             </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="chart-container">
-                                <canvas id="cash-flow-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Simulador financiero y créditos disponibles -->
-                <div class="widget-grid">
-                    <!-- Simulador financiero -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Simulador de inversión</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content" style="padding: 15px;">
-                            <div class="tabs">
-                                <div class="tab active" data-tab="optimistic">Optimista</div>
-                                <div class="tab" data-tab="conservative">Conservador</div>
-                                <div class="tab" data-tab="pessimistic">Pesimista</div>
-                            </div>
-                            
-                            <div class="tab-content active" id="optimistic-content">
-                                <div style="margin: 15px 0;">
-                                    <p><strong>TIR:</strong> 22.5%</p>
-                                    <p><strong>VAN:</strong> $320,000</p>
-                                    <p><strong>ROI:</strong> 28.4%</p>
-                                    <p><strong>Tiempo de recuperación:</strong> 2.8 años</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tab-content" id="conservative-content">
-                                <div style="margin: 15px 0;">
-                                    <p><strong>TIR:</strong> 18.5%</p>
-                                    <p><strong>VAN:</strong> $256,000</p>
-                                    <p><strong>ROI:</strong> 25.4%</p>
-                                    <p><strong>Tiempo de recuperación:</strong> 3.2 años</p>
-                                </div>
-                            </div>
-                            
-                            <div class="tab-content" id="pessimistic-content">
-                                <div style="margin: 15px 0;">
-                                    <p><strong>TIR:</strong> 15.2%</p>
-                                    <p><strong>VAN:</strong> $180,000</p>
-                                    <p><strong>ROI:</strong> 19.8%</p>
-                                    <p><strong>Tiempo de recuperación:</strong> 4.1 años</p>
-                                </div>
-                            </div>
-                            
-                            <div style="text-align: center; margin-top: 15px;">
-                                <button class="btn-dashboard btn-primary-dashboard">
-                                    <i class="fas fa-calculator"></i> Personalizar simulación
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Créditos disponibles -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Créditos disponibles</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Tipo de crédito</th>
-                                        <th>Monto</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="loans-table">
-                                    <!-- Se llenará con JavaScript -->
-                                </tbody>
-                            </table>
-                            <div style="text-align: center; margin-top: 15px;">
-                                <button class="btn-dashboard">
-                                    <i class="fas fa-search-dollar"></i> Ver más créditos
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Impacto financiero de decisiones agrícolas -->
-                <div class="widget">
-                    <div class="widget-header">
-                        <h3 class="widget-title">Impacto financiero de decisiones agrícolas</h3>
-                        <div class="widget-actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </div>
-                    </div>
-                    <div class="widget-content" style="padding: 15px;">
-                        <div class="widget-grid">
-                            <div>
-                                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Recomendaciones con mayor impacto financiero</h4>
-                                <ul style="list-style: none; padding: 0;">
-                                    <li style="padding: 10px; background-color: var(--light-green); margin-bottom: 5px; border-radius: var(--border-radius-sm);">
-                                        <div style="display: flex; align-items: center;">
-                                            <div style="background-color: var(--accent-color); color: white; padding: 6px; border-radius: 50%; margin-right: 10px;">
-                                                <i class="fas fa-bug"></i>
-                                            </div>
-                                            <div>
-                                                <strong>Inspeccionar por plagas</strong>
-                                                <p style="margin: 2px 0; font-size: 0.85rem;">Ahorros potenciales: 25% de costos por pérdidas</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li style="padding: 10px; background-color: var(--light-green); margin-bottom: 5px; border-radius: var(--border-radius-sm);">
-                                        <div style="display: flex; align-items: center;">
-                                            <div style="background-color: var(--accent-color); color: white; padding: 6px; border-radius: 50%; margin-right: 10px;">
-                                                <i class="fas fa-tractor"></i>
-                                            </div>
-                                            <div>
-                                                <strong>Planificar cosecha</strong>
-                                                <p style="margin: 2px 0; font-size: 0.85rem;">Ahorros potenciales: 15% por timing óptimo</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li style="padding: 10px; background-color: var(--light-green); margin-bottom: 5px; border-radius: var(--border-radius-sm);">
-                                        <div style="display: flex; align-items: center;">
-                                            <div style="background-color: var(--accent-color); color: white; padding: 6px; border-radius: 50%; margin-right: 10px;">
-                                                <i class="fas fa-flask"></i>
-                                            </div>
-                                            <div>
-                                                <strong>Aplicar fertilizante</strong>
-                                                <p style="margin: 2px 0; font-size: 0.85rem;">Ahorros potenciales: 12% en rendimiento</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Impacto financiero por cultivo</h4>
-                                <div style="height: 220px;">
-                                    <canvas id="crops-impact-chart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contenido del Panel de Entidad Financiera -->
-            <div id="bank-panel" class="panel-content">
-                <!-- Título y acciones del Dashboard -->
-                <div class="dashboard-title">
-                    <h2>Panel de Entidad Financiera</h2>
-                    <div class="dashboard-actions">
-                        <button class="btn-dashboard">
-                            <i class="fas fa-download"></i> Exportar
-                        </button>
-                        <button class="btn-dashboard btn-primary-dashboard">
-                            <i class="fas fa-plus"></i> Nueva evaluación
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- KPIs de entidad financiera -->
-                <div class="widget-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-icon green">
-                            <i class="fas fa-money-check-alt"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">$2,500,000</h4>
-                            <p class="kpi-label">Créditos aprobados (mensual)</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> 15% vs mes anterior
-                            </div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon blue">
-                            <i class="fas fa-hand-holding-usd"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">$350,000</h4>
-                            <p class="kpi-label">Ahorros por optim. recursos</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> 8% vs mes anterior
-                            </div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon orange">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">25.4%</h4>
-                            <p class="kpi-label">ROI promedio</p>
-                            <div class="kpi-trend down">
-                                <i class="fas fa-arrow-down"></i> 1.2% vs mes anterior
-                            </div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon green">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="kpi-content">
-                            <h4 class="kpi-value">6 días</h4>
-                            <p class="kpi-label">Tiempo respuesta crédito</p>
-                            <div class="kpi-trend up">
-                                <i class="fas fa-arrow-up"></i> -25% vs mes anterior
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Distribución de riesgo y desempeño de cartera -->
-                <div class="widget-grid">
-                    <!-- Distribución de riesgo -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Distribución de riesgo</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="chart-container">
-                                <canvas id="risk-distribution-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Desempeño de cartera -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Desempeño de cartera</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="chart-container">
-                                <canvas id="portfolio-performance-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Distribución por cultivo y tiempo de aprobación -->
-                <div class="widget-grid">
-                    <!-- Distribución por cultivo -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Distribución por cultivo</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="chart-container">
-                                <canvas id="crop-distribution-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Tiempo de aprobación -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Tiempo de aprobación</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="chart-container">
-                                <canvas id="approval-time-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Clientes y productores -->
-                <div class="widget large-chart">
-                    <div class="widget-header">
-                        <h3 class="widget-title">Clientes y productores</h3>
-                        <div class="widget-actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </div>
-                    </div>
-                    <div class="widget-content">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Ubicación</th>
-                                    <th>Cultivo</th>
-                                    <th>Score</th>
-                                    <th>Status</th>
-                                    <th>Préstamos</th>
-                                    <th>Monto</th>
-                                    <th>Desempeño</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="clients-table">
-                                <!-- Se llenará con JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Smart contracts -->
-                <div class="widget">
-                    <div class="widget-header">
-                        <h3 class="widget-title">Smart Contracts y desembolsos automáticos</h3>
-                        <div class="widget-actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </div>
-                    </div>
-                    <div class="widget-content">
-                        <div class="widget-grid">
-                            <div>
-                                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Smart Contracts Activos</h4>
-                                <div style="background-color: var(--light-green); padding: 15px; border-radius: var(--border-radius);">
-                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                                        <div>
-                                            <strong>Total contratos activos:</strong>
-                                        </div>
-                                        <div>
-                                            <span style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);">28</span>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                                        <div>
-                                            <strong>Monto total comprometido:</strong>
-                                        </div>
-                                        <div>
-                                            <span style="font-size: 1.2rem; font-weight: 600; color: var(--primary-color);">$4,850,000</span>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                                        <div>
-                                            <strong>Ejecutados este mes:</strong>
-                                        </div>
-                                        <div>
-                                            <span style="font-size: 1.2rem; font-weight: 600; color: var(--primary-color);">7</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Próximos desembolsos automáticos</h4>
-                                <table class="data-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Cliente</th>
-                                            <th>Fecha</th>
-                                            <th>Monto</th>
-                                            <th>Condición</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Carlos Rodríguez</td>
-                                            <td>24/04/2025</td>
-                                            <td>$50,000</td>
-                                            <td><span class="badge badge-primary">NDVI > 0.65</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Luisa Fernández</td>
-                                            <td>25/04/2025</td>
-                                            <td>$75,000</td>
-                                            <td><span class="badge badge-primary">Humedad > 40%</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>María González</td>
-                                            <td>27/04/2025</td>
-                                            <td>$35,000</td>
-                                            <td><span class="badge badge-primary">Cosecha > 5 ton</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contenido del Panel de Compradores -->
-            <div id="buyer-panel" class="panel-content">
-                <!-- Título y acciones del Dashboard -->
-                <div class="dashboard-title">
-                    <h2>Panel de Comprador</h2>
-                    <div class="dashboard-actions">
-                        <button class="btn-dashboard">
-                            <i class="fas fa-download"></i> Exportar
-                        </button>
-                        <button class="btn-dashboard btn-primary-dashboard">
-                            <i class="fas fa-plus"></i> Nueva orden
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Mapa de proveedores -->
-                <div class="widget">
-                    <div class="widget-header">
-                        <h3 class="widget-title">Mapa de proveedores</h3>
-                        <div class="widget-actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </div>
-                    </div>
-                    <div class="widget-content">
-                        <div class="map-container" id="suppliers-map"></div>
-                    </div>
-                </div>
-
-                <!-- Filtros para proveedores -->
-                <div class="filter-bar">
-                    <div class="filters">
-                        <div class="filter-item">
-                            <span class="filter-label">Producto:</span>
-                            <select class="filter-select">
-                                <option value="all">Todos los productos</option>
-                                <option value="maiz">Maíz</option>
-                                <option value="trigo">Trigo</option>
-                                <option value="frijol">Frijol</option>
-                                <option value="lechuga">Lechuga</option>
-                                <option value="tomate">Tomate</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <span class="filter-label">Región:</span>
-                            <select class="filter-select">
-                                <option value="all">Todas las regiones</option>
-                                <option value="sonora">Sonora</option>
-                                <option value="sinaloa">Sinaloa</option>
-                                <option value="jalisco">Jalisco</option>
-                                <option value="michoacan">Michoacán</option>
-                                <option value="guanajuato">Guanajuato</option>
-                            </select>
-                        </div>
-                        <div class="filter-item">
-                            <span class="filter-label">Certificación:</span>
-                            <select class="filter-select">
-                                <option value="all">Todas las certificaciones</option>
-                                <option value="organico">Orgánico</option>
-                                <option value="gap">Global G.A.P.</option>
-                                <option value="fairtrade">Fair Trade</option>
-                                <option value="haccp">HACCP</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="search-bar">
-                        <input type="text" class="search-input" placeholder="Buscar proveedor...">
-                        <button class="btn-dashboard">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Disponibilidad de productos y certificaciones -->
-                <div class="widget-grid">
-                    <!-- Disponibilidad de productos -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Disponibilidad de productos</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="chart-container">
-                                <canvas id="product-availability-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Certificaciones -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Certificaciones</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <div class="chart-container">
-                                <canvas id="certifications-chart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Listado de proveedores -->
-                <div class="widget large-chart">
-                    <div class="widget-header">
-                        <h3 class="widget-title">Proveedores disponibles</h3>
-                        <div class="widget-actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </div>
-                    </div>
-                    <div class="widget-content">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Ubicación</th>
-                                    <th>Producto</th>
-                                    <th>Certificaciones</th>
-                                    <th>Confiabilidad</th>
-                                    <th>Próx. disponibilidad</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="suppliers-table">
-                                <!-- Se llenará con JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Órdenes y trazabilidad con blockchain -->
-                <div class="widget-grid">
-                    <!-- Órdenes activas -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Órdenes activas</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Proveedor</th>
-                                        <th>Producto</th>
-                                        <th>Cantidad</th>
-                                        <th>Entrega</th>
-                                        <th>Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="orders-table">
-                                    <!-- Se llenará con JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <!-- Trazabilidad blockchain -->
-                    <div class="widget">
-                        <div class="widget-header">
-                            <h3 class="widget-title">Trazabilidad blockchain</h3>
-                            <div class="widget-actions">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </div>
-                        </div>
-                        <div class="widget-content" style="padding: 15px;">
-                            <div style="background-color: var(--light-green); padding: 15px; border-radius: var(--border-radius); margin-bottom: 15px;">
-                                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Escanear código QR para verificar origen</h4>
-                                <div style="text-align: center;">
-                                    <div style="background-color: white; display: inline-block; padding: 15px; border-radius: var(--border-radius);">
-                                        <i class="fas fa-qrcode" style="font-size: 100px; color: var(--primary-color);"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline">
-                                <div class="timeline-item">
-                                    <div class="timeline-icon">
+                            <div class="finance-opportunities">
+                                <div class="finance-opportunity">
+                                    <div class="opportunity-icon">
                                         <i class="fas fa-seedling"></i>
                                     </div>
-                                    <div class="timeline-content">
-                                        <h4 class="timeline-title">Siembra</h4>
-                                        <div class="timeline-time">05/01/2025</div>
-                                        <div class="timeline-details">
-                                            Semillas certificadas plantadas en Parcela 3, Hermosillo
+                                    <div class="opportunity-content">
+                                        <h4>Préstamo de equipamiento</h4>
+                                        <p>Hasta $25,000 con 3.8% de interés</p>
+                                        <div class="opportunity-actions">
+                                            <button class="btn-primary">Solicitar</button>
+                                            <button class="btn-outline">Detalles</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-icon">
-                                        <i class="fas fa-cloud-rain"></i>
-                                    </div>
-                                    <div class="timeline-content">
-                                        <h4 class="timeline-title">Riego y nutrición</h4>
-                                        <div class="timeline-time">Ene-Abr 2025</div>
-                                        <div class="timeline-details">
-                                            Riego optimizado, fertilizantes orgánicos aplicados según sensores
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-icon">
+                                <div class="finance-opportunity">
+                                    <div class="opportunity-icon">
                                         <i class="fas fa-tractor"></i>
                                     </div>
-                                    <div class="timeline-content">
-                                        <h4 class="timeline-title">Cosecha</h4>
-                                        <div class="timeline-time">15/04/2025</div>
-                                        <div class="timeline-details">
-                                            Producto cosechado y seleccionado, rendimiento: 7.8 ton/ha
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="timeline-item">
-                                    <div class="timeline-icon">
-                                        <i class="fas fa-truck"></i>
-                                    </div>
-                                    <div class="timeline-content">
-                                        <h4 class="timeline-title">Transporte</h4>
-                                        <div class="timeline-time">18/04/2025</div>
-                                        <div class="timeline-details">
-                                            En ruta a centro de distribución, temp. controlada: 12°C
+                                    <div class="opportunity-content">
+                                        <h4>Seguro de cosecha</h4>
+                                        <p>15% de descuento en temporada baja</p>
+                                        <div class="opportunity-actions">
+                                            <button class="btn-primary">Solicitar</button>
+                                            <button class="btn-outline">Detalles</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1129,31 +398,93 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </main>
 
-    <!-- Modal para detalles -->
-    <div class="modal-overlay" id="details-modal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Detalles</h3>
-                <button class="modal-close">&times;</button>
+                <!-- Buyer Panel -->
+                <div id="buyer-panel" class="panel-content">
+                    <div class="kpi-cards">
+                        <div class="kpi-card">
+                            <h3>152 ton</h3>
+                            <p class="kpi-label">Producción estimada</p>
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-up"></i> 8%
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <h3>Jun 2025</h3>
+                            <p class="kpi-label">Fecha estimada de cosecha</p>
+                            <div class="kpi-trend neutral">
+                                <i class="fas fa-minus"></i> Según lo planeado
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <h3>A+</h3>
+                            <p class="kpi-label">Calificación de calidad</p>
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-up"></i> +1
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <h3>$1,250/ton</h3>
+                            <p class="kpi-label">Precio estimado</p>
+                            <div class="kpi-trend positive">
+                                <i class="fas fa-arrow-up"></i> 3.5%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widgets-row">
+                        <div class="widget large-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-clipboard-check"></i> Certificaciones</h3>
+                            </div>
+                            <div class="certifications-container">
+                                <div class="certification">
+                                    <img src="assets/cert-organic.png" alt="Certificado Orgánico">
+                                    <h4>Certificado Orgánico</h4>
+                                    <p>Válido hasta: Oct 2025</p>
+                                </div>
+                                <div class="certification">
+                                    <img src="assets/cert-fairtrade.png" alt="Comercio Justo">
+                                    <h4>Comercio Justo</h4>
+                                    <p>Válido hasta: Dec 2025</p>
+                                </div>
+                                <div class="certification">
+                                    <img src="assets/cert-sustainable.png" alt="Agricultura Sostenible">
+                                    <h4>Agricultura Sostenible</h4>
+                                    <p>Válido hasta: Sep 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body" id="modal-content">
-                <!-- Se llenará con JavaScript -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn-dashboard">Cerrar</button>
-                <button class="btn-dashboard btn-primary-dashboard">Confirmar</button>
-            </div>
-        </div>
+        </main>
     </div>
-    
+
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet JS para mapas -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    
+    <!-- Chart.js para gráficas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- GSAP para animaciones -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    
+    <!-- ScrollTrigger plugin para GSAP (igual que en index) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    
+    <!-- Three.js para efectos de fondo (igual que en index) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    
+    <!-- AOS para animaciones al hacer scroll (igual que en index) -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    
+    <!-- Vanilla-tilt.js para efectos 3D en hover (igual que en index) -->
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
+    
+    <!-- Scripts propios -->
     <script src="assets/demo-data.js"></script>
-    <script src="main.js"></script>
+    <script src="dashboard.js"></script>
 </body>
 </html>

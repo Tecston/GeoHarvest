@@ -3,8 +3,82 @@ function goToDashboard() {
   window.location.href = "dashboard.html";
 }
 
+// Crear animación 3D para fondo del hero usando Three.js
+function initHeroBackground() {
+  const heroSection = document.querySelector('.hero');
+  if (!heroSection) return;
+  
+  const container = document.querySelector('.hero-particles');
+  if (!container) return;
+
+  // Setup
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+  
+  // Create particles
+  const particleGeometry = new THREE.BufferGeometry();
+  const particleCount = 1500;
+  
+  const posArray = new Float32Array(particleCount * 3);
+  const scaleArray = new Float32Array(particleCount);
+  
+  for (let i = 0; i < particleCount * 3; i += 3) {
+    // Position in 3D space
+    posArray[i] = (Math.random() - 0.5) * 10;
+    posArray[i + 1] = (Math.random() - 0.5) * 10;
+    posArray[i + 2] = (Math.random() - 0.5) * 10;
+    
+    // Scale for each particle
+    scaleArray[i/3] = Math.random();
+  }
+  
+  particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+  particleGeometry.setAttribute('scale', new THREE.BufferAttribute(scaleArray, 1));
+  
+  // Material with custom shader
+  const particleMaterial = new THREE.PointsMaterial({
+    size: 0.05,
+    color: 0x157A6E,
+    transparent: true,
+    opacity: 0.8,
+    sizeAttenuation: true
+  });
+  
+  const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+  scene.add(particleSystem);
+  
+  camera.position.z = 5;
+  
+  // Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+    
+    particleSystem.rotation.x += 0.0005;
+    particleSystem.rotation.y += 0.0008;
+    
+    renderer.render(scene, camera);
+  }
+  
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+  
+  animate();
+}
+
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize 3D background
+  initHeroBackground();
+
   // Animación de entrada para elementos de la página
   animateOnScroll();
 
