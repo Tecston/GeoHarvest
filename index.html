@@ -6,69 +6,131 @@
   <title>GeoHarvest - Cultivating Financial Certainty</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <header>
-    <h1>🌾 GeoHarvest</h1>
+  <header class="header-main">
+    <h1><span class="logo-icon">🌾</span> GeoHarvest</h1>
     <p>Lo que no ves, te puede costar millones</p>
     <nav>
-      <a href="#about">Sobre Nosotros</a>
-      <a href="#benefits">Beneficios</a>
-      <a href="#planes">Planes</a>
-      <a href="#equipo">Equipo</a>
-      <a href="#demo" class="btn-demo">Demo</a>
+      <a href="#about"><i class="fas fa-info-circle"></i> Sobre Nosotros</a>
+      <a href="#benefits"><i class="fas fa-star"></i> Beneficios</a>
+      <a href="#planes"><i class="fas fa-clipboard-list"></i> Planes</a>
+      <a href="#equipo"><i class="fas fa-users"></i> Equipo</a>
+      <a href="#demo" class="btn-demo"><i class="fas fa-chart-line"></i> Demo</a>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero" id="about">
       <h2>La próxima mala decisión puede costarte una cosecha entera...</h2>
       <p>GeoHarvest transforma tu campo en inteligencia con datos satelitales.</p>
+      <div class="hero-cta">
+        <button onclick="goToDashboard()" class="btn-primary pulse-animation">Ver Solución <i class="fas fa-arrow-right"></i></button>
+      </div>
     </section>
 
-    <section id="benefits" class="card-grid">
-      <h2>🌿 Beneficios Clave</h2>
+    <section id="benefits" class="card-grid fade-ready">
+      <h2><i class="fas fa-leaf"></i> Beneficios Clave</h2>
       <ul>
-        <li>Identificación de zonas productivas óptimas</li>
-        <li>Predicciones satelitales para reducir riesgos</li>
-        <li>Trazabilidad completa del campo al cliente</li>
-        <li>Optimización de costos operativos por parcela</li>
-        <li>Visualización del retorno esperado por cultivo</li>
-        <li>Decisiones basadas en datos, no intuición</li>
+        <li>
+          <span class="benefit-icon"><i class="fas fa-map-marked-alt"></i></span>
+          <div class="benefit-content">
+            <h3>Identificación de zonas productivas óptimas</h3>
+            <p>Localiza con precisión las áreas de mayor rendimiento en tu campo.</p>
+          </div>
+        </li>
+        <li>
+          <span class="benefit-icon"><i class="fas fa-satellite"></i></span>
+          <div class="benefit-content">
+            <h3>Predicciones satelitales para reducir riesgos</h3>
+            <p>Anticipa problemas antes de que afecten tu rendimiento.</p>
+          </div>
+        </li>
+        <li>
+          <span class="benefit-icon"><i class="fas fa-route"></i></span>
+          <div class="benefit-content">
+            <h3>Trazabilidad completa del campo al cliente</h3>
+            <p>Seguimiento de todo el proceso para mayor transparencia.</p>
+          </div>
+        </li>
+        <li>
+          <span class="benefit-icon"><i class="fas fa-coins"></i></span>
+          <div class="benefit-content">
+            <h3>Optimización de costos operativos por parcela</h3>
+            <p>Reduce gastos innecesarios y maximiza la eficiencia.</p>
+          </div>
+        </li>
+        <li>
+          <span class="benefit-icon"><i class="fas fa-chart-pie"></i></span>
+          <div class="benefit-content">
+            <h3>Visualización del retorno esperado por cultivo</h3>
+            <p>Planificación financiera precisa basada en datos reales.</p>
+          </div>
+        </li>
+        <li>
+          <span class="benefit-icon"><i class="fas fa-brain"></i></span>
+          <div class="benefit-content">
+            <h3>Decisiones basadas en datos, no intuición</h3>
+            <p>Minimiza errores y maximiza resultados con inteligencia artificial.</p>
+          </div>
+        </li>
       </ul>
     </section>
 
-    <section id="planes" class="planes">
-      <h2>📦 Beneficios Exclusivos y Planes</h2>
+    <section id="planes" class="planes fade-ready">
+      <h2><i class="fas fa-box-open"></i> Beneficios Exclusivos y Planes</h2>
       <div class="plan">
+        <div class="plan-badge">Recomendado</div>
         <h3>Plan Socio Pionero</h3>
-        <p>
-          ✔ Acceso a módulos premium (valor $50,000 MXN)<br>
-          ✔ Participación en mejoras y funciones personalizadas<br>
-          ✔ Retorno estimado en menos de 12 meses<br>
-          ✔ Mención en materiales oficiales<br>
-          ✔ Precio preferencial en futuras renovaciones
-        </p>
+        <div class="plan-price">$1,063,000 MXN</div>
+        <div class="plan-features">
+          <p>
+            <i class="fas fa-check-circle"></i> Acceso a módulos premium (valor $50,000 MXN)<br>
+            <i class="fas fa-check-circle"></i> Participación en mejoras y funciones personalizadas<br>
+            <i class="fas fa-check-circle"></i> Retorno estimado en menos de 12 meses<br>
+            <i class="fas fa-check-circle"></i> Mención en materiales oficiales<br>
+            <i class="fas fa-check-circle"></i> Precio preferencial en futuras renovaciones
+          </p>
+        </div>
+        <button class="btn-plan">Seleccionar Plan</button>
       </div>
       <div class="plan">
         <h3>Términos del Acuerdo</h3>
-        <p>
-          ✔ Inversión única: $1,063,000 MXN<br>
-          ✔ MVP funcional en 4 meses<br>
-          ✔ 3 años de suscripción premium<br>
-          ✔ Soporte técnico y módulos personalizados incluidos
-        </p>
+        <div class="plan-features">
+          <p>
+            <i class="fas fa-check-circle"></i> Inversión única: $1,063,000 MXN<br>
+            <i class="fas fa-check-circle"></i> MVP funcional en 4 meses<br>
+            <i class="fas fa-check-circle"></i> 3 años de suscripción premium<br>
+            <i class="fas fa-check-circle"></i> Soporte técnico y módulos personalizados incluidos
+          </p>
+        </div>
+        <button class="btn-plan">Ver Detalles</button>
       </div>
     </section>
 
-    <section id="sostenibilidad">
-      <h2>📊 Sostenibilidad Financiera</h2>
-      <p>Con solo 2 clientes base y 1 escalado se genera $305,000 MXN/trimestre.</p>
-      <p>Costos mensuales: $163,000 MXN — autosostenible en 6 meses.</p>
+    <section id="sostenibilidad" class="fade-ready">
+      <h2><i class="fas fa-chart-line"></i> Sostenibilidad Financiera</h2>
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-card-header">Ingresos Trimestrales</div>
+          <div class="info-card-body">
+            <div class="info-card-value">$305,000 MXN</div>
+            <div class="info-card-desc">Con solo 2 clientes base y 1 escalado</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-header">Costos Mensuales</div>
+          <div class="info-card-body">
+            <div class="info-card-value">$163,000 MXN</div>
+            <div class="info-card-desc">Autosostenible en 6 meses</div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="roi">
-      <h2>📈 Proyección de ROI</h2>
+    <section id="roi" class="fade-ready">
+      <h2><i class="fas fa-chart-bar"></i> Proyección de ROI</h2>
       <table>
         <thead>
           <tr><th>Año</th><th>Ingresos</th><th>ROI</th><th>Clientes</th></tr>
@@ -83,27 +145,69 @@
       </table>
     </section>
 
-    <section id="equipo">
-      <h2>👥 Nuestro Equipo</h2>
-      <ul>
-        <li>Daniel Barreras – Consultant</li>
-        <li>Jesus Medina – Project Manager</li>
-        <li>Jorge Coronado – Technical Lead</li>
-        <li>Issa Durán – Strategy Manager</li>
-        <li>Alejandra Caro – Field Partnerships</li>
+    <section id="equipo" class="fade-ready">
+      <h2><i class="fas fa-users"></i> Nuestro Equipo</h2>
+      <ul class="team-grid">
+        <li class="team-member">
+          <div class="member-avatar">DB</div>
+          <div class="member-name">Daniel Barreras</div>
+          <div class="member-role">Consultant</div>
+        </li>
+        <li class="team-member">
+          <div class="member-avatar">JM</div>
+          <div class="member-name">Jesus Medina</div>
+          <div class="member-role">Project Manager</div>
+        </li>
+        <li class="team-member">
+          <div class="member-avatar">JC</div>
+          <div class="member-name">Jorge Coronado</div>
+          <div class="member-role">Technical Lead</div>
+        </li>
+        <li class="team-member">
+          <div class="member-avatar">ID</div>
+          <div class="member-name">Issa Durán</div>
+          <div class="member-role">Strategy Manager</div>
+        </li>
+        <li class="team-member">
+          <div class="member-avatar">AC</div>
+          <div class="member-name">Alejandra Caro</div>
+          <div class="member-role">Field Partnerships</div>
+        </li>
       </ul>
-      <p>Asesoría de expertos de MIT, Oxford y más.</p>
+      <p class="team-support">Asesoría de expertos de MIT, Oxford y más.</p>
     </section>
 
-    <section id="demo" class="cta">
+    <section id="demo" class="cta fade-ready">
       <h2>🚀 Demo Interactivo</h2>
       <p>Explora nuestro dashboard agrícola con gráficas animadas en tiempo real.</p>
-      <button onclick="goToDashboard()">Ver Demo</button>
+      <button onclick="goToDashboard()" class="btn-cta">Ver Demo <i class="fas fa-arrow-right"></i></button>
     </section>
   </main>
 
   <footer>
-    <p>© GeoHarvest 2024 — Construyamos juntos el futuro del agro en México.</p>
+    <div class="footer-content">
+      <div class="footer-logo">
+        <h2>🌾 GeoHarvest</h2>
+        <p>Cultivating Financial Certainty</p>
+      </div>
+      <div class="footer-contact">
+        <h3>Contáctanos</h3>
+        <p><i class="fas fa-envelope"></i> info@geoharvest.mx</p>
+        <p><i class="fas fa-phone"></i> +52 (33) 1234-5678</p>
+      </div>
+      <div class="footer-social">
+        <h3>Síguenos</h3>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© GeoHarvest 2025 — Construyamos juntos el futuro del agro en México.</p>
+    </div>
   </footer>
 
   <script src="main.js"></script>
