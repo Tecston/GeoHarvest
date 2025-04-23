@@ -7,50 +7,99 @@ function goToDashboard() {
 document.addEventListener('DOMContentLoaded', () => {
   // Animación de entrada para elementos de la página
   animateOnScroll();
-  
+
   // Añadir efecto de scroll suave para los enlaces internos
   setupSmoothScrolling();
-  
+
   // Inicializar números animados
   setupCounterAnimation();
-  
+
   // Cambiar header al hacer scroll
   setupStickyHeader();
+
+  // Configurar botón de dashboard
+  const dashboardBtn = document.getElementById('dashboardBtn');
+  if (dashboardBtn) {
+    dashboardBtn.addEventListener('click', () => {
+      goToDashboard();
+    });
+
+    // Add hover-lift class for CSS-based hover effect
+    dashboardBtn.classList.add('hover-lift');
+  }
+
+  // Configurar todos los botones con clase btn-cta que necesitan ir al dashboard
+  document.querySelectorAll('.btn-cta').forEach(button => {
+    button.addEventListener('click', () => {
+      goToDashboard();
+    });
+
+    // Add hover-lift class for CSS-based hover effect
+    button.classList.add('hover-lift');
+  });
+
+  // Add hover-lift class to plan cards for consistent hover effects
+  const planCards = document.querySelectorAll('.plan');
+  planCards.forEach(card => {
+    card.classList.add('hover-lift');
+  });
+
+  // Add hover-lift class to team member cards
+  const teamMembers = document.querySelectorAll('.team-member');
+  teamMembers.forEach(member => {
+    member.classList.add('hover-lift');
+  });
+
+  // Pulse animation for key buttons
+  function addPulseEffect(button) {
+    button.addEventListener('click', function() {
+      this.classList.add('pulse');
+      setTimeout(() => {
+        this.classList.remove('pulse');
+      }, 1000);
+    });
+  }
+
+  const ctaButtons = document.querySelectorAll('.btn-cta, .btn-primary');
+  ctaButtons.forEach(button => {
+    addPulseEffect(button);
+  });
 });
 
 // Función para animar elementos cuando entran en el viewport
 function animateOnScroll() {
-  const sections = document.querySelectorAll('section');
-  
-  const observer = new IntersectionObserver((entries) => {
+  const fadeElements = document.querySelectorAll('.fade-ready');
+
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const fadeObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('animate-in');
-        observer.unobserve(entry.target);
+        fadeObserver.unobserve(entry.target);
       }
     });
-  }, {
-    threshold: 0.2,
-    rootMargin: '0px 0px -100px 0px'
-  });
-  
-  sections.forEach(section => {
-    section.classList.add('fade-ready');
-    observer.observe(section);
+  }, observerOptions);
+
+  fadeElements.forEach(el => {
+    fadeObserver.observe(el);
   });
 }
 
 // Configurar desplazamiento suave para los enlaces internos
 function setupSmoothScrolling() {
   const navLinks = document.querySelectorAll('nav a[href^="#"]');
-  
+
   navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
-      
+
       const targetId = this.getAttribute('href');
       const targetElement = document.querySelector(targetId);
-      
+
       if (targetElement) {
         window.scrollTo({
           top: targetElement.offsetTop - 100,
@@ -64,7 +113,7 @@ function setupSmoothScrolling() {
 // Añadir efecto de contador para números
 function setupCounterAnimation() {
   const roi = document.querySelector('#roi');
-  
+
   if (roi) {
     const cells = roi.querySelectorAll('td');
     cells.forEach(cell => {
@@ -94,7 +143,7 @@ function setupCounterAnimation() {
         }
       });
     }, {threshold: 0.5});
-    
+
     observer.observe(roi);
   }
 }
@@ -108,10 +157,10 @@ function animateValue(cell) {
   const duration = 1500;
   const increment = target / (duration / 16);
   let currentValue = startValue;
-  
+
   const animateCounter = () => {
     currentValue += increment;
-    
+
     if (currentValue >= target) {
       if (isPercentage) {
         cell.textContent = target.toFixed(1) + '%';
@@ -131,7 +180,7 @@ function animateValue(cell) {
       requestAnimationFrame(animateCounter);
     }
   };
-  
+
   requestAnimationFrame(animateCounter);
 }
 
@@ -143,37 +192,12 @@ function formatNumber(num) {
 // Header que cambia al hacer scroll
 function setupStickyHeader() {
   const header = document.querySelector('header');
-  const headerHeight = header.offsetHeight;
-  
+
   window.addEventListener('scroll', () => {
-    if (window.scrollY > headerHeight) {
+    if (window.scrollY > 50) {
       header.classList.add('header-scrolled');
     } else {
       header.classList.remove('header-scrolled');
     }
   });
-}
-
-// Añadir efectos hover a elementos
-document.querySelectorAll('.plan, .card-grid li, #equipo li').forEach(item => {
-  item.addEventListener('mouseenter', function() {
-    this.style.transform = 'translateY(-10px)';
-    this.style.boxShadow = '0 15px 30px rgba(0,0,0,0.15)';
-  });
-  
-  item.addEventListener('mouseleave', function() {
-    this.style.transform = '';
-    this.style.boxShadow = '';
-  });
-});
-
-// Añadir efecto de pulse al botón CTA
-const ctaButton = document.querySelector('.cta button');
-if (ctaButton) {
-  setInterval(() => {
-    ctaButton.classList.add('pulse');
-    setTimeout(() => {
-      ctaButton.classList.remove('pulse');
-    }, 1000);
-  }, 3000);
 }

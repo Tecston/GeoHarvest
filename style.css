@@ -1489,17 +1489,41 @@ footer p {
 }
 
 .map-layer {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-xs);
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  margin-right: var(--space-sm);
+  color: white;
+  font-weight: 600;
   font-size: var(--font-size-sm);
 }
 
-.layer-color {
-  width: 15px;
-  height: 15px;
-  border-radius: 3px;
+.layer-crops {
+  background: rgba(76, 175, 80, 0.7);
+}
+
+.layer-soil {
+  background: rgba(121, 85, 72, 0.7);
+}
+
+.layer-water {
+  background: rgba(33, 150, 243, 0.7);
+}
+
+.layer-climate {
+  background: rgba(255, 152, 0, 0.7);
+}
+
+/* Map layer classes */
+.layer-optimal {
+  background: rgba(76, 175, 80, 0.7);
+}
+
+.layer-low {
+  background: rgba(255, 152, 0, 0.7);
+}
+
+.layer-alert {
+  background: rgba(244, 67, 54, 0.7);
 }
 
 /* Tools panel */
@@ -2034,6 +2058,54 @@ footer p {
   font-size: var(--font-size-sm);
 }
 
+/* Progress bar styles */
+.progress-container {
+  width: 100%;
+  background-color: var(--light-background);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.progress-green {
+  background-color: #4CAF50;
+}
+
+.progress-blue {
+  background-color: #2196F3;
+}
+
+/* Credit score section styles */
+.credit-score-section {
+  padding: 20px;
+}
+
+.credit-score-title {
+  color: var(--primary-color);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.credit-score-status {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.credit-score-factors {
+  margin-top: 1rem;
+}
+
+.credit-score-factors-title {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 /* Table styles for dashboard */
 .data-table {
   width: 100%;
@@ -2106,4 +2178,96 @@ footer p {
 
 .status-error {
   background: #f44336;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: var(--transition);
+}
+
+.card-hover-active {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Animation delays */
+.delay-xs {
+  animation-delay: 0.1s;
+}
+
+.delay-sm {
+  animation-delay: 0.2s;
+}
+
+.delay-md {
+  animation-delay: 0.3s;
+}
+
+.delay-lg {
+  animation-delay: 0.4s;
+}
+
+/* Animation delay classes */
+.delay-01 {
+  animation-delay: 0.1s;
+}
+
+.delay-02 {
+  animation-delay: 0.2s;
+}
+
+.delay-03 {
+  animation-delay: 0.3s;
+}
+
+.delay-04 {
+  animation-delay: 0.4s;
+}
+
+.delay-05 {
+  animation-delay: 0.5s;
+}
+
+/* Element hover effects */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Pulse animation for buttons */
+.pulse {
+  animation: pulse-animation 1s;
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(46, 125, 50, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 125, 50, 0);
+  }
+}
+
+/* Element hover effects */
+.hover-lift {
+  transition: var(--transition);
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Dashboard specific animations */
+.dashboard-card {
+  animation: fadeUp 0.5s ease-out forwards;
+  opacity: 0;
 }
