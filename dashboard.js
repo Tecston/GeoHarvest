@@ -662,569 +662,486 @@ function refreshChartsWithNewData() {
     });
 }
 
-// Load alerts into alerts container with enhanced animations
+// Load alerts from data source
 function loadAlerts() {
     const alertsContainer = document.getElementById('alerts-container');
-    
     if (!alertsContainer) return;
     
-    const alerts = [
-        {
-            type: 'danger',
-            icon: 'fa-bug',
-            title: 'Alerta de plaga',
-            message: 'Posible plaga detectada en la Parcela 3. Se recomienda inspección inmediata.',
-            time: '10 minutos'
-        },
+    // Datos de ejemplo para alertas (en producción vendría de la base de datos)
+    const alertsData = [
         {
             type: 'warning',
-            icon: 'fa-water',
-            title: 'Nivel bajo de humedad',
-            message: 'La Parcela 2 requiere irrigación. El nivel de humedad está por debajo del umbral recomendado.',
-            time: '30 minutos'
+            message: 'Nivel de humedad bajo en Sector Norte',
+            time: '10:23',
+            details: 'El nivel de humedad ha caído por debajo del 30% en los últimos 3 días.'
+        },
+        {
+            type: 'danger',
+            message: 'Posible plaga detectada en Parcela 3',
+            time: '08:15',
+            details: 'Imágenes por satélite muestran patrones consistentes con infestación de áfidos.'
         },
         {
             type: 'info',
-            icon: 'fa-temperature-high',
-            title: 'Temperatura elevada',
-            message: 'Se pronostica una ola de calor para los próximos 3 días. Considere ajustar el riego.',
-            time: '1 hora'
-        }
-    ];
-    
-    // Clear container first
-    alertsContainer.innerHTML = '';
-    
-    // Add each alert with a delay and mejorada como en index
-    alerts.forEach((alert, index) => {
-        const alertElement = document.createElement('div');
-        alertElement.className = `alert alert-${alert.type} hover-lift`;
-        alertElement.innerHTML = `
-            <div class="alert-icon pulse-subtle">
-                <i class="fas ${alert.icon}"></i>
-            </div>
-            <div class="alert-content">
-                <h4>${alert.title}</h4>
-                <p>${alert.message}</p>
-                <span class="alert-time"><i class="fas fa-clock"></i> Hace ${alert.time}</span>
-            </div>
-            <div class="alert-actions">
-                <button class="btn-alert-dismiss hover-lift">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-        
-        alertsContainer.appendChild(alertElement);
-        
-        // Animación mejorada como en index con GSAP
-        gsap.from(alertElement, {
-            duration: 0.7,
-            opacity: 0,
-            x: 40,
-            delay: index * 0.3,
-            ease: 'power3.out'
-        });
-        
-        // Add dismiss functionality
-        alertElement.querySelector('.btn-alert-dismiss').addEventListener('click', () => {
-            gsap.to(alertElement, {
-                duration: 0.5,
-                height: 0,
-                opacity: 0,
-                padding: 0,
-                marginBottom: 0,
-                ease: 'power2.inOut',
-                onComplete: () => {
-                    alertElement.remove();
-                }
-            });
-        });
-    });
-}
-
-// Load AI recommendations con animaciones mejoradas para consistencia
-function loadRecommendations() {
-    const recContainer = document.getElementById('recommendations-container');
-    
-    if (!recContainer) return;
-    
-    const recommendations = [
-        {
-            type: 'primary',
-            icon: 'fa-brain',
-            title: 'Optimización de riego',
-            message: 'Basado en los datos satelitales, se recomienda reducir el riego en la Parcela 1 en un 15% para optimizar el uso de agua sin afectar el rendimiento.',
-            time: '15 minutos'
+            message: 'Ventana óptima para cosecha próxima',
+            time: 'Ayer',
+            details: 'Condiciones climáticas ideales previstas para los próximos 5 días.'
         },
         {
             type: 'success',
-            icon: 'fa-leaf',
-            title: 'Mejora de nutrientes',
-            message: 'Análisis reciente muestra deficiencia de potasio. Se recomienda aplicación de fertilizante potásico en la próxima semana.',
-            time: '2 horas'
-        },
-        {
-            type: 'info',
-            icon: 'fa-money-bill-wave',
-            title: 'Oportunidad de mercado',
-            message: 'Precios del maíz proyectados al alza (8%) en los próximos 30 días. Considere retrasar la venta si es posible.',
-            time: '5 horas'
+            message: 'Objetivo de rendimiento alcanzado',
+            time: 'Ayer',
+            details: 'La parcela este ha alcanzado el rendimiento objetivo 3 días antes de lo previsto.'
         }
     ];
     
-    // Clear container first
-    recContainer.innerHTML = '';
+    // Limpiar contenedor
+    alertsContainer.innerHTML = '';
     
-    // Add each recommendation with enhanced animations matching index
-    recommendations.forEach((rec, index) => {
-        const recElement = document.createElement('div');
-        recElement.className = `alert alert-${rec.type} hover-lift`;
-        recElement.innerHTML = `
-            <div class="alert-icon">
-                <i class="fas ${rec.icon}"></i>
+    // Añadir cada alerta con animación escalonada
+    alertsData.forEach((alert, index) => {
+        const alertElement = document.createElement('div');
+        alertElement.className = `alert alert-${alert.type}`;
+        alertElement.innerHTML = `
+            <div class="alert-header">
+                <i class="fas fa-${alert.type === 'warning' ? 'exclamation-triangle' : 
+                                  alert.type === 'danger' ? 'radiation' : 
+                                  alert.type === 'info' ? 'info-circle' : 'check-circle'}"></i>
+                <h4>${alert.message}</h4>
+                <span class="alert-time">${alert.time}</span>
             </div>
-            <div class="alert-content">
-                <h4>${rec.title}</h4>
-                <p>${rec.message}</p>
-                <span class="alert-time"><i class="fas fa-clock"></i> Hace ${rec.time}</span>
-            </div>
+            <p class="alert-details">${alert.details}</p>
             <div class="alert-actions">
-                <button class="btn-alert-action pulse-animation hover-lift">
-                    <i class="fas fa-check"></i>
-                </button>
-                <button class="btn-alert-dismiss hover-lift">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="btn-sm btn-outline"><i class="fas fa-check"></i> Marcar como leído</button>
+                <button class="btn-sm btn-outline"><i class="fas fa-ellipsis-h"></i></button>
             </div>
         `;
         
-        recContainer.appendChild(recElement);
-        
-        // Enhanced animation matching index style
-        gsap.from(recElement, {
-            duration: 0.7,
-            opacity: 0,
-            x: 40,
-            delay: index * 0.3 + 0.3,
-            ease: 'power3.out'
-        });
-        
-        // Add action functionality with improved animations
-        recElement.querySelector('.btn-alert-action').addEventListener('click', () => {
-            showNotification('Recomendación implementada correctamente', 'success');
-            
-            // Enhanced confirmation animation
-            gsap.to(recElement, {
-                backgroundColor: 'rgba(46, 204, 113, 0.2)',
-                duration: 0.5,
-                ease: 'power2.inOut'
-            });
-            
-            const actionBtn = recElement.querySelector('.btn-alert-action');
-            actionBtn.innerHTML = '<i class="fas fa-check-double"></i>';
-            actionBtn.classList.add('confirmed');
-            
-            // Add confetti/success animation
-            gsap.fromTo(actionBtn, 
-                { rotation: 0, scale: 1 },
-                { 
-                    rotation: 360, 
-                    scale: 1.2, 
+        // Configurar evento para marcar como leído
+        const readBtn = alertElement.querySelector('.btn-sm');
+        if (readBtn) {
+            readBtn.addEventListener('click', function() {
+                gsap.to(alertElement, {
+                    opacity: 0.6,
+                    height: 0,
+                    padding: 0,
+                    marginBottom: 0,
                     duration: 0.5,
-                    ease: 'back.out(1.7)',
                     onComplete: () => {
-                        gsap.to(actionBtn, {
-                            scale: 1,
-                            duration: 0.3
-                        });
+                        alertElement.remove();
+                        showNotification('Alerta marcada como leída', 'success');
+                        
+                        // Actualizar contador de alertas
+                        const alertCounter = document.querySelector('.alert-counter');
+                        if (alertCounter) {
+                            const currentCount = parseInt(alertCounter.textContent);
+                            if (currentCount > 0) {
+                                alertCounter.textContent = currentCount - 1;
+                                if (currentCount - 1 === 0) {
+                                    alertCounter.style.display = 'none';
+                                }
+                            }
+                        }
                     }
-                }
-            );
-            
-            actionBtn.disabled = true;
-        });
-        
-        // Add dismiss functionality
-        recElement.querySelector('.btn-alert-dismiss').addEventListener('click', () => {
-            gsap.to(recElement, {
-                duration: 0.5,
-                height: 0,
-                opacity: 0,
-                padding: 0,
-                marginBottom: 0,
-                ease: 'power3.inOut',
-                onComplete: () => {
-                    recElement.remove();
-                }
+                });
             });
+        }
+        
+        alertsContainer.appendChild(alertElement);
+        
+        // Animación de entrada
+        gsap.from(alertElement, {
+            y: 20,
+            opacity: 0,
+            duration: 0.4,
+            delay: index * 0.15,
+            ease: 'power1.out'
         });
     });
+    
+    // Actualizar contador de alertas
+    const alertCounter = document.querySelector('.alert-counter');
+    if (alertCounter) {
+        alertCounter.textContent = alertsData.length;
+        alertCounter.style.display = alertsData.length > 0 ? 'block' : 'none';
+    }
 }
 
-// Initialize weather widget with same animation style as index
+// Load recommendations based on crop data and conditions
+function loadRecommendations() {
+    const recommendationsContainer = document.getElementById('recommendations-container');
+    if (!recommendationsContainer) return;
+    
+    // Datos de ejemplo para recomendaciones (en producción serían generados por algoritmos)
+    const recommendations = [
+        {
+            title: 'Ajustar programa de riego',
+            description: 'Basado en las previsiones meteorológicas, se recomienda reducir el riego en un 15% durante los próximos 3 días.',
+            impact: 'Alto',
+            category: 'water'
+        },
+        {
+            title: 'Momento óptimo para fertilización',
+            description: 'Las condiciones actuales son ideales para aplicar fertilizante nitrogenado en el Sector Sur.',
+            impact: 'Medio',
+            category: 'fertilizer'
+        },
+        {
+            title: 'Planificación de cosecha',
+            description: 'Programar la cosecha para el próximo martes minimizaría las pérdidas por las lluvias pronosticadas.',
+            impact: 'Alto',
+            category: 'harvest'
+        },
+        {
+            title: 'Rotación de cultivos',
+            description: 'Para la próxima temporada, considere alternar con leguminosas para mejorar la estructura del suelo.',
+            impact: 'Bajo',
+            category: 'planning'
+        }
+    ];
+    
+    // Limpiar contenedor
+    recommendationsContainer.innerHTML = '';
+    
+    // Añadir cada recomendación
+    recommendations.forEach((rec, index) => {
+        const recElement = document.createElement('div');
+        recElement.className = 'recommendation-card';
+        recElement.setAttribute('data-aos', 'fade-up');
+        recElement.setAttribute('data-aos-delay', (index * 100).toString());
+        
+        const iconMap = {
+            water: 'tint',
+            fertilizer: 'seedling',
+            harvest: 'tractor',
+            planning: 'calendar-alt',
+            pest: 'bug',
+            soil: 'layer-group'
+        };
+        
+        const impactClass = rec.impact === 'Alto' ? 'high-impact' : 
+                           rec.impact === 'Medio' ? 'medium-impact' : 'low-impact';
+        
+        recElement.innerHTML = `
+            <div class="recommendation-icon">
+                <i class="fas fa-${iconMap[rec.category] || 'lightbulb'}"></i>
+            </div>
+            <div class="recommendation-content">
+                <h4>${rec.title}</h4>
+                <p>${rec.description}</p>
+                <div class="recommendation-meta">
+                    <span class="impact-tag ${impactClass}">Impacto: ${rec.impact}</span>
+                    <button class="btn-outline btn-sm">Implementar</button>
+                </div>
+            </div>
+        `;
+        
+        // Evento para botón de implementar
+        const implementBtn = recElement.querySelector('.btn-outline');
+        if (implementBtn) {
+            implementBtn.addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-check"></i> Implementado';
+                this.classList.add('implemented');
+                this.disabled = true;
+                showNotification('Recomendación marcada como implementada', 'success');
+            });
+        }
+        
+        recommendationsContainer.appendChild(recElement);
+    });
+    
+    // Iniciar animaciones de AOS para esta sección
+    if (typeof AOS !== 'undefined') {
+        AOS.refresh();
+    }
+}
+
+// Initialize the weather widget with current data
 function initWeatherWidget() {
-    const weatherContainer = document.querySelector('.weather-indicators');
+    const weatherWidget = document.getElementById('weather-widget');
+    if (!weatherWidget) return;
     
-    if (!weatherContainer) return;
-    
-    // Sample weather data
+    // En producción, estos datos vendrían de una API meteorológica
     const weatherData = {
         current: {
-            temp: 26,
-            humidity: 65,
-            uv: 7,
-            windSpeed: 12
+            temp: 24,
+            condition: 'Soleado',
+            humidity: 62,
+            windSpeed: 8,
+            icon: 'sun'
         },
         forecast: [
-            { day: 'Hoy', icon: 'sun', temp: 26 },
-            { day: 'Mañana', icon: 'cloud-sun', temp: 24 },
-            { day: 'Mie', icon: 'cloud', temp: 23 }
+            { day: 'Mañana', temp: 26, icon: 'cloud-sun' },
+            { day: 'Miércoles', temp: 29, icon: 'sun' },
+            { day: 'Jueves', temp: 23, icon: 'cloud-rain' },
+            { day: 'Viernes', temp: 22, icon: 'cloud-showers-heavy' }
         ]
     };
     
-    // Construct weather widget
-    const weatherHTML = `
-        <div class="current-weather">
-            <div class="weather-icon">
-                <i class="fas fa-sun"></i>
-            </div>
-            <div class="weather-data">
-                <div class="temp">${weatherData.current.temp}°C</div>
-                <div class="weather-details">
-                    <span><i class="fas fa-tint"></i> ${weatherData.current.humidity}%</span>
-                    <span><i class="fas fa-wind"></i> ${weatherData.current.windSpeed} km/h</span>
-                </div>
-            </div>
-        </div>
-        <div class="forecast">
-            ${weatherData.forecast.map(day => `
-                <div class="forecast-day">
-                    <div class="day">${day.day}</div>
-                    <div class="icon"><i class="fas fa-${day.icon}"></i></div>
-                    <div class="temp">${day.temp}°</div>
-                </div>
-            `).join('')}
-        </div>
-    `;
+    // Actualizar el widget con los datos
+    const currentTemp = weatherWidget.querySelector('.current-temp');
+    if (currentTemp) currentTemp.textContent = `${weatherData.current.temp}°C`;
     
-    weatherContainer.innerHTML = weatherHTML;
+    const currentCondition = weatherWidget.querySelector('.current-condition');
+    if (currentCondition) currentCondition.textContent = weatherData.current.condition;
     
-    // Enhance animations to match index style
-    gsap.from('.current-weather', {
-        duration: 0.7,
+    const currentIcon = weatherWidget.querySelector('.weather-icon i');
+    if (currentIcon) {
+        currentIcon.className = '';
+        currentIcon.classList.add('fas', `fa-${weatherData.current.icon}`);
+    }
+    
+    const humidityValue = weatherWidget.querySelector('.humidity-value');
+    if (humidityValue) humidityValue.textContent = `${weatherData.current.humidity}%`;
+    
+    const windValue = weatherWidget.querySelector('.wind-value');
+    if (windValue) windValue.textContent = `${weatherData.current.windSpeed} km/h`;
+    
+    // Actualizar pronóstico
+    const forecastContainer = weatherWidget.querySelector('.weather-forecast');
+    if (forecastContainer) {
+        forecastContainer.innerHTML = '';
+        weatherData.forecast.forEach(day => {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'forecast-day';
+            dayElement.innerHTML = `
+                <span>${day.day}</span>
+                <i class="fas fa-${day.icon}"></i>
+                <span>${day.temp}°C</span>
+            `;
+            forecastContainer.appendChild(dayElement);
+        });
+    }
+    
+    // Animar entrada del widget
+    gsap.from(weatherWidget, {
+        y: 30,
         opacity: 0,
-        y: 20,
-        ease: 'power3.out'
-    });
-    
-    gsap.from('.forecast-day', {
-        duration: 0.6,
-        opacity: 0,
-        y: 20,
-        stagger: 0.15,
-        delay: 0.3,
-        ease: 'power3.out'
+        duration: 0.8,
+        ease: 'power2.out'
     });
 }
 
-// Setup dark mode toggle with enhanced animations
+// Setup dark mode toggle
 function setupDarkMode() {
-    const darkModeToggle = document.querySelector('.dark-mode-toggle');
-    
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
     if (!darkModeToggle) return;
     
-    // Check user preference
+    // Verificar preferencia guardada
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    darkModeToggle.checked = isDarkMode;
     
-    // Set initial mode
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
-        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-    }
-    
-    // Toggle dark mode on click
-    darkModeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        
+    // Actualizar estado del toggle
+    const updateToggleText = () => {
         const isDark = document.body.classList.contains('dark-mode');
-        localStorage.setItem('darkMode', isDark);
+        const toggleText = document.querySelector('.toggle-text');
+        if (toggleText) {
+            toggleText.textContent = isDark ? 'Modo oscuro' : 'Modo claro';
+        }
+    };
+    
+    updateToggleText();
+    
+    // Manejar cambio de toggle
+    darkModeToggle.addEventListener('change', function() {
+        document.body.classList.toggle('dark-mode', this.checked);
+        localStorage.setItem('darkMode', this.checked);
+        updateToggleText();
         
-        // Change icon
-        darkModeToggle.innerHTML = isDark ? 
-            '<i class="fas fa-sun"></i>' : 
-            '<i class="fas fa-moon"></i>';
-        
-        // Enhanced animation for transition
-        gsap.to('.dark-mode-toggle i', {
-            duration: 0.7,
-            rotation: '+=360',
-            ease: 'power3.inOut'
+        // Animación de transición
+        const panels = document.querySelectorAll('.panel');
+        gsap.to(panels, {
+            backgroundColor: this.checked ? '#2a2d3e' : '#ffffff',
+            color: this.checked ? '#e0e0e0' : '#333333',
+            duration: 0.5
         });
-        
-        // Update chart themes
-        updateChartThemes(isDark);
     });
 }
 
-// Update chart themes based on dark mode
-function updateChartThemes(isDark) {
-    Chart.instances.forEach(chart => {
-        // Update grid colors
-        if (chart.options.scales && chart.options.scales.y) {
-            chart.options.scales.y.grid.color = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+// Initialize real-time data updates
+function initRealTimeUpdates() {
+    // Simular actualizaciones en tiempo real (en producción, esto sería websockets)
+    const cropDataElement = document.getElementById('crop-health-data');
+    const yieldDataElement = document.getElementById('yield-prediction-data');
+    
+    if (!cropDataElement || !yieldDataElement) return;
+    
+    // Actualizar datos cada cierto tiempo
+    setInterval(() => {
+        // Actualización aleatoria de datos de salud de cultivos
+        if (Math.random() > 0.7) {
+            const healthChange = (Math.random() * 4 - 2).toFixed(1);
+            gsap.to(cropDataElement, {
+                innerHTML: parseFloat(cropDataElement.textContent) + parseFloat(healthChange),
+                duration: 1,
+                snap: { innerHTML: 0.1 },
+                onUpdate: () => {
+                    // Cambiar color basado en el valor
+                    const value = parseFloat(cropDataElement.textContent);
+                    if (value > 85) cropDataElement.style.color = '#4caf50';
+                    else if (value > 70) cropDataElement.style.color = '#8bc34a';
+                    else if (value > 50) cropDataElement.style.color = '#ffc107';
+                    else cropDataElement.style.color = '#f44336';
+                }
+            });
         }
         
-        // Update text colors
-        if (chart.options.plugins && chart.options.plugins.legend) {
-            chart.options.plugins.legend.labels.color = isDark ? '#ddd' : '#666';
+        // Actualización aleatoria de datos de predicción de rendimiento
+        if (Math.random() > 0.8) {
+            const yieldChange = (Math.random() * 2 - 0.5).toFixed(1);
+            gsap.to(yieldDataElement, {
+                innerHTML: parseFloat(yieldDataElement.textContent) + parseFloat(yieldChange),
+                duration: 1,
+                snap: { innerHTML: 0.1 }
+            });
         }
-        
-        // Update tick colors
-        if (chart.options.scales) {
-            if (chart.options.scales.y) {
-                chart.options.scales.y.ticks = {
-                    color: isDark ? '#aaa' : '#666'
-                };
-            }
-            if (chart.options.scales.x) {
-                chart.options.scales.x.ticks = {
-                    color: isDark ? '#aaa' : '#666'
-                };
-            }
-        }
-        
-        chart.update();
-    });
-}
-
-// Animate panel entrance with improved animations
-function animatePanelEntrance() {
-    gsap.from('.panel-content.active .kpi-card', {
-        duration: 0.7,
-        opacity: 0,
-        y: 30,
-        stagger: 0.15,
-        ease: 'power3.out'
-    });
-    
-    gsap.from('.panel-content.active .widget', {
-        duration: 0.8,
-        opacity: 0,
-        y: 40,
-        stagger: 0.2,
-        delay: 0.3,
-        ease: 'power3.out'
-    });
-}
-
-// Configurar AOS (Animate On Scroll) para mantener coherencia con index
-function setupAOSAnimations() {
-    // Verificar si AOS ya está disponible en la página
-    if (typeof AOS !== 'undefined') {
-        // Inicializar AOS con la configuración similar a index
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
-        });
-        
-        // Añadir atributos AOS a elementos del dashboard si no existen
-        const elementsToAnimate = document.querySelectorAll('.widget, .kpi-card, .panel-header');
-        let delay = 50;
-        
-        elementsToAnimate.forEach(element => {
-            if (!element.hasAttribute('data-aos')) {
-                element.setAttribute('data-aos', 'fade-up');
-                element.setAttribute('data-aos-delay', delay.toString());
-                delay += 50;
-            }
-        });
-    }
-}
-
-// Inicializar los efectos de hover para mantener coherencia con index
-function setupHoverEffects() {
-    // Añadir clase hover-lift a elementos interactivos
-    const interactiveElements = document.querySelectorAll('.kpi-card, .btn-primary, .panel-option, .widget-header');
-    
-    interactiveElements.forEach(element => {
-        if (!element.classList.contains('hover-lift')) {
-            element.classList.add('hover-lift');
-        }
-    });
-    
-    // Inicializar Tilt.js para efectos 3D en tarjetas si está disponible
-    if (typeof VanillaTilt !== 'undefined') {
-        VanillaTilt.init(document.querySelectorAll('.kpi-card'), {
-            max: 5,
-            speed: 400,
-            glare: true,
-            'max-glare': 0.1,
-            scale: 1.03
-        });
-    }
-}
-
-// Inicializa el fondo de partículas similar a index.html
-function initParticlesBackground() {
-    const container = document.querySelector('.dashboard-particles');
-    if (!container || typeof THREE === 'undefined') return;
-
-    // Setup Three.js
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    container.appendChild(renderer.domElement);
-
-    // Create particles - similar al index pero con menos partículas para no sobrecargar el dashboard
-    const particleGeometry = new THREE.BufferGeometry();
-    const particleCount = 800;
-
-    const posArray = new Float32Array(particleCount * 3);
-    
-    for (let i = 0; i < particleCount * 3; i += 3) {
-        // Position in 3D space
-        posArray[i] = (Math.random() - 0.5) * 10;
-        posArray[i + 1] = (Math.random() - 0.5) * 10;
-        posArray[i + 2] = (Math.random() - 0.5) * 10;
-    }
-
-    particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-    // Material with custom shader
-    const particleMaterial = new THREE.PointsMaterial({
-        size: 0.05,
-        color: 0x157A6E,
-        transparent: true,
-        opacity: 0.5,
-        sizeAttenuation: true
-    });
-
-    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
-    scene.add(particleSystem);
-
-    camera.position.z = 5;
-
-    // Animation loop with subtle movement - más suave para dashboard
-    function animate() {
-        requestAnimationFrame(animate);
-        particleSystem.rotation.x += 0.0003;
-        particleSystem.rotation.y += 0.0005;
-        
-        renderer.render(scene, camera);
-    }
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
-    });
-
-    animate();
-}
-
-// Show notification with enhanced animations matching index
-function showNotification(message, type = 'info') {
-    // Create notification container if it doesn't exist
-    if (!document.querySelector('.notification-container')) {
-        const container = document.createElement('div');
-        container.className = 'notification-container';
-        document.body.appendChild(container);
-    }
-    
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type} hover-lift`;
-    notification.innerHTML = `
-        <div class="notification-icon pulse-subtle">
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i>
-        </div>
-        <div class="notification-content">
-            ${message}
-        </div>
-        <button class="notification-close hover-lift">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
-    
-    document.querySelector('.notification-container').appendChild(notification);
-    
-    // Show with enhanced animation matching index style
-    gsap.fromTo(notification, 
-        { 
-            opacity: 0, 
-            y: -40,
-            scale: 0.9
-        },
-        {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.6,
-            ease: 'elastic.out(1, 0.5)'
-        }
-    );
-    
-    // Add close handler
-    notification.querySelector('.notification-close').addEventListener('click', () => {
-        closeNotification(notification);
-    });
-    
-    // Auto close after 5 seconds
-    setTimeout(() => {
-        closeNotification(notification);
     }, 5000);
 }
 
-// Close notification with enhanced animation
-function closeNotification(notification) {
-    gsap.to(notification, {
-        opacity: 0,
-        x: 100,
-        scale: 0.9,
-        duration: 0.5,
-        ease: 'power3.in',
-        onComplete: () => {
-            notification.remove();
-        }
+// Setup AOS animations
+function setupAOSAnimations() {
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out',
+            once: false,
+            mirror: true,
+            offset: 50
+        });
+    }
+}
+
+// Setup hover effects for interactive elements
+function setupHoverEffects() {
+    // Hover effects para las tarjetas de cultivos
+    const cropCards = document.querySelectorAll('.crop-card');
+    cropCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            gsap.to(this, {
+                y: -10,
+                boxShadow: '0 15px 30px rgba(0,0,0,0.1)',
+                duration: 0.3
+            });
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            gsap.to(this, {
+                y: 0,
+                boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
+                duration: 0.3
+            });
+        });
+    });
+    
+    // Hover effects para los botones de acción
+    const actionButtons = document.querySelectorAll('.action-button');
+    actionButtons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            gsap.to(this.querySelector('i'), {
+                scale: 1.2,
+                rotate: '10deg',
+                duration: 0.2
+            });
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            gsap.to(this.querySelector('i'), {
+                scale: 1,
+                rotate: '0deg',
+                duration: 0.2
+            });
+        });
     });
 }
 
-// Initialize real-time updates with subtle animations
-function initRealTimeUpdates() {
-    // Simulate real-time sensor data updates
-    setInterval(() => {
-        // Random small changes to chart data
-        Chart.instances.forEach(chart => {
-            if (chart.canvas.id === 'humidity-chart') {
-                chart.data.datasets[0].data = chart.data.datasets[0].data.map(val => {
-                    let change = Math.random() * 2 - 1; // -1 to +1
-                    let newVal = val + change;
-                    return Math.min(Math.max(newVal, 30), 70); // Keep between 30-70
-                });
-                chart.update('quiet'); // Update without animation
-            }
-            
-            if (chart.canvas.id === 'temperature-chart') {
-                chart.data.datasets[0].data = chart.data.datasets[0].data.map(val => {
-                    let change = Math.random() * 0.6 - 0.3; // -0.3 to +0.3
-                    let newVal = val + change;
-                    return Math.min(Math.max(newVal, 20), 32); // Keep between 20-32
-                });
-                chart.update('quiet'); // Update without animation
+// Initialize background particles
+function initParticlesBackground() {
+    const particlesContainer = document.getElementById('particles-background');
+    if (!particlesContainer) return;
+    
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-background', {
+            particles: {
+                number: { value: 30, density: { enable: true, value_area: 800 } },
+                color: { value: '#a3e635' },
+                opacity: { value: 0.3, random: true },
+                size: { value: 5, random: true },
+                move: { 
+                    enable: true, 
+                    speed: 1, 
+                    direction: 'none', 
+                    random: true, 
+                    out_mode: 'out' 
+                },
+                line_linked: { enable: false }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'bubble' },
+                    onclick: { enable: true, mode: 'repulse' }
+                },
+                modes: {
+                    bubble: { distance: 200, size: 6, opacity: 0.4 },
+                    repulse: { distance: 200, duration: 0.4 }
+                }
             }
         });
-    }, 10000); // Update every 10 seconds
+    }
+}
+
+// Animate panel entrance
+function animatePanelEntrance() {
+    const panels = document.querySelectorAll('.panel');
+    if (panels.length === 0) return;
     
-    // Simulate random alerts (in a real app, these would come from a server)
+    // Staggered entrance animation
+    gsap.from(panels, {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power2.out'
+    });
+    
+    // Escalar ligeramente para dar efecto de "pop"
+    panels.forEach((panel, index) => {
+        gsap.from(panel, {
+            scale: 0.95,
+            duration: 0.4,
+            delay: 0.3 + (index * 0.1),
+            ease: 'back.out(1.5)'
+        });
+    });
+}
+
+// Show notification message
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                           type === 'error' ? 'exclamation-circle' : 
+                           type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animar entrada
+    gsap.fromTo(notification, 
+        { right: '-300px', opacity: 0 },
+        { right: '20px', opacity: 1, duration: 0.5, ease: 'power3.out' }
+    );
+    
+    // Animar salida después de un tiempo
     setTimeout(() => {
-        const alertTypes = ['Humedad baja', 'Temperatura alta', 'Cambio brusco de clima'];
-        const randomAlert = alertTypes[Math.floor(Math.random() * alertTypes.length)];
-        
-        showNotification(`¡Nueva alerta! ${randomAlert} detectado en Parcela 2.`, 'warning');
-    }, 45000); // After 45 seconds
+        gsap.to(notification, {
+            opacity: 0,
+            y: -10,
+            duration: 0.5,
+            onComplete: () => notification.remove()
+        });
+    }, 5000);
 }

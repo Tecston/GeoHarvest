@@ -11,73 +11,972 @@
     <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Usando las mismas que el index -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- AOS CSS para animaciones al hacer scroll (igual que en index) -->
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <!-- AOS CSS para animaciones al hacer scroll -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     
-    <!-- Estilo personalizado -->
+    <!-- Estilo principal del sitio -->
     <link rel="stylesheet" href="style.css">
     
     <!-- Estilos específicos del dashboard -->
     <style>
-        /* Estilos para mantener coherencia con el index */
+        /* Estructura principal del dashboard */
         .dashboard-container {
+            display: flex;
+            min-height: 100vh;
             position: relative;
-            overflow-x: hidden;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            overflow: hidden;
         }
         
-        .dashboard-particles {
-            position: absolute;
-            top: 0;
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--gradient-primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
             left: 0;
+            top: 0;
+            z-index: 100;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .sidebar.collapsed {
+            width: 70px;
+            padding: 1.5rem 0.5rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 2.5rem;
+            padding: 0 0.5rem;
+        }
+        
+        .logo img, .logo .logo-icon {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            font-size: 1.5rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+            white-space: nowrap;
+            color: white;
+        }
+        
+        .sidebar-menu {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            padding-right: 0.5rem;
+        }
+        
+        .sidebar-menu::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .sidebar-menu::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius-full);
+        }
+        
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            border-radius: var(--border-radius);
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu li a i {
+            font-size: 1.1rem;
+            width: 22px;
+            text-align: center;
+        }
+        
+        .sidebar-menu li.active a,
+        .sidebar-menu li a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease;
+        }
+        
+        .user-info:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .user-avatar img {
             width: 100%;
             height: 100%;
-            z-index: -1;
-            pointer-events: none;
+            object-fit: cover;
         }
         
+        .user-details {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .user-details h4 {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .user-details p {
+            margin: 0;
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: var(--color-primary-dark);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            margin: 0 0.5rem 0.5rem;
+            overflow: hidden;
+        }
+        
+        .user-dropdown ul {
+            list-style: none;
+            padding: 0.5rem 0;
+            margin: 0;
+        }
+        
+        .user-dropdown li a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            color: white;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        
+        .user-dropdown li a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Dashboard content */
+        .dashboard-content {
+            flex: 1;
+            padding: 1.5rem;
+            margin-left: 260px;
+            transition: margin 0.3s ease;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        
+        .collapsed-sidebar .dashboard-content {
+            margin-left: 70px;
+        }
+        
+        /* Topbar */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .toggle-sidebar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            color: var(--color-text);
+            transition: all 0.2s ease;
+        }
+        
+        .toggle-sidebar:hover {
+            background: var(--color-background-alt);
+        }
+        
+        .topbar-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--color-text);
+        }
+        
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .topbar button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            color: var(--color-text);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .topbar button:hover {
+            background: var(--color-background-alt);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            background: var(--color-secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .parcel-selector-container {
+            position: relative;
+        }
+        
+        #parcel-selector {
+            appearance: none;
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border: 1px solid var(--color-background-alt);
+            border-radius: var(--border-radius);
+            background-color: var(--color-white);
+            color: var(--color-text);
+            font-family: var(--font-primary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23263238' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1rem;
+        }
+        
+        #parcel-selector:hover {
+            border-color: var(--color-primary-light);
+        }
+        
+        #parcel-selector:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        /* Notification banner */
+        .notification-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: var(--border-radius-lg);
+            background: var(--gradient-secondary);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .notification-banner p {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .notification-banner button {
+            background: transparent;
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .notification-banner button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Panel selector */
+        .panel-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .panel-option {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-full);
+            background: var(--color-white);
+            color: var(--color-text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .panel-option i {
+            font-size: 1rem;
+            color: var(--color-primary);
+        }
+        
+        .panel-option.active {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .panel-option.active i {
+            color: white;
+        }
+        
+        /* Widgets layout */
+        .panels-container {
+            position: relative;
+        }
+        
+        .panel-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .panel-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .kpi-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .kpi-card {
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .kpi-card h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem;
+            color: var(--color-primary-dark);
+        }
+        
+        .kpi-label {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin: 0 0 0.75rem;
+        }
+        
+        .kpi-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .kpi-trend.positive {
+            background: rgba(76, 175, 80, 0.15);
+            color: #2e7d32;
+        }
+        
+        .kpi-trend.negative {
+            background: rgba(244, 67, 54, 0.15);
+            color: #d32f2f;
+        }
+        
+        .kpi-trend.neutral {
+            background: rgba(33, 150, 243, 0.15);
+            color: #1976d2;
+        }
+        
+        .widgets-row {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .widget {
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .widget:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .small-widget {
+            grid-column: span 3;
+        }
+        
+        .medium-widget {
+            grid-column: span 6;
+        }
+        
+        .large-widget {
+            grid-column: span 9;
+        }
+        
+        .full-widget {
+            grid-column: span 12;
+        }
+        
+        .widget-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+        
+        .widget-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text);
+        }
+        
+        .widget-header h3 i {
+            color: var(--color-primary);
+            font-size: 1.1rem;
+        }
+        
+        .widget-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .widget-action {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--border-radius);
+            background: transparent;
+            color: var(--color-text-light);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .widget-action:hover {
+            background: var(--color-background-alt);
+            color: var(--color-text);
+        }
+        
+        /* Chart containers */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 240px;
+        }
+        
+        .map-container {
+            height: 340px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        /* Weather widget */
+        .weather-indicators {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 240px;
+            overflow-y: auto;
+        }
+        
+        .weather-day {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.7rem;
+            border-radius: var(--border-radius);
+            background: var(--color-background-alt);
+            transition: all 0.2s ease;
+        }
+        
+        .weather-day:hover {
+            background: var(--color-background);
+        }
+        
+        .weather-day-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .weather-icon {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .weather-details h4 {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .weather-details p {
+            margin: 0;
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+        }
+        
+        .weather-temp {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        /* Alerts and recommendations */
+        .badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            border-radius: var(--border-radius-full);
+            background: var(--color-secondary);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0 0.5rem;
+        }
+        
+        .badge.green {
+            background: var(--color-primary);
+        }
+        
+        .alerts-container {
+            height: 240px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .alert-item {
+            padding: 0.8rem 1rem;
+            border-radius: var(--border-radius);
+            background: var(--color-background-alt);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            transition: all 0.2s ease;
+        }
+        
+        .alert-item:hover {
+            background: var(--color-background);
+        }
+        
+        .alert-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(244, 67, 54, 0.15);
+            color: #d32f2f;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        .recommendation-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(76, 175, 80, 0.15);
+            color: #2e7d32;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+        
+        .alert-content h4 {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .alert-content p {
+            margin: 0.3rem 0 0;
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+        }
+        
+        .alert-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .alert-actions button {
+            padding: 0.2rem 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: var(--border-radius-sm);
+            background: var(--color-white);
+            border: 1px solid var(--color-background-alt);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .alert-actions button:hover {
+            border-color: var(--color-primary-light);
+            background: var(--color-background);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .small-widget {
+                grid-column: span 6;
+            }
+            
+            .medium-widget {
+                grid-column: span 6;
+            }
+            
+            .large-widget {
+                grid-column: span 12;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1000;
+                width: 250px;
+            }
+            
+            .sidebar.visible {
+                transform: translateX(0);
+            }
+            
+            .dashboard-content {
+                margin-left: 0;
+            }
+            
+            .small-widget,
+            .medium-widget,
+            .large-widget {
+                grid-column: span 12;
+            }
+            
+            .panel-selector {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+                margin-bottom: 1rem;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .panel-option {
+                flex-shrink: 0;
+            }
+        }
+        
+        /* Agrego los efectos de hover y animaciones */
         .hover-lift {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
         .hover-lift:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-lg);
         }
         
         .pulse-animation {
-            animation: pulse 1.5s ease-in-out infinite;
+            animation: pulse 2s infinite;
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 143, 0, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 143, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 143, 0, 0);
+            }
         }
         
-        .widget {
+        /* Finance opportunities */
+        .finance-opportunities {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .finance-opportunity {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--color-background-alt);
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease;
+        }
+        
+        .finance-opportunity:hover {
+            background: var(--color-background);
+        }
+        
+        .opportunity-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-primary-light);
+            color: white;
+            border-radius: var(--border-radius);
+            font-size: 1.25rem;
+        }
+        
+        .opportunity-content {
+            flex: 1;
+        }
+        
+        .opportunity-content h4 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .opportunity-content p {
+            margin: 0.3rem 0 0.7rem;
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+        }
+        
+        .opportunity-actions {
+            display: flex;
+            gap: 0.6rem;
+        }
+        
+        .opportunity-actions button {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: var(--color-primary-dark);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--color-text-light);
+            color: var(--color-text);
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--color-text);
+        }
+        
+        /* Certificaciones */
+        .certifications-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .certification {
+            flex: 1;
+            min-width: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--color-background-alt);
+            border-radius: var(--border-radius-lg);
             transition: all 0.3s ease;
         }
         
-        /* Efectos de degradado como en index */
-        .gradient-bg {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border-radius: 10px;
-            color: white;
+        .certification:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            background: var(--color-white);
+        }
+        
+        .certification img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+        
+        .certification h4 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .certification p {
+            margin: 0.5rem 0 0;
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+        }
+        
+        /* Dashboard particles background */
+        .dashboard-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.3;
         }
     </style>
 </head>
 <body>
-    <!-- Contenedor para partículas Three.js (igual que en index) -->
+    <!-- Contenedor para partículas Three.js -->
     <div class="dashboard-particles" id="particles-background"></div>
 
     <div class="dashboard-container">
         <!-- Sidebar navigation -->
         <aside class="sidebar" data-aos="fade-right" data-aos-duration="800">
             <div class="logo">
-                <img src="assets/logo.png" alt="GeoHarvest Logo">
+                <span class="logo-icon">🌱</span>
                 <h1>GeoHarvest</h1>
             </div>
             <nav class="sidebar-menu">
@@ -95,29 +994,28 @@
                         <a href="#"><i class="fas fa-chart-line"></i> Análisis</a>
                     </li>
                     <li>
+                        <a href="#"><i class="fas fa-leaf"></i> Cultivos</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fas fa-satellite"></i> Datos Satelitales</a>
+                    </li>
+                    <li>
                         <a href="#"><i class="fas fa-cog"></i> Configuración</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fas fa-question-circle"></i> Ayuda</a>
+                        <a href="index.html"><i class="fas fa-home"></i> Volver al inicio</a>
                     </li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
                 <div class="user-info">
                     <div class="user-avatar">
-                        <img src="assets/avatar.jpg" alt="User Avatar">
+                        <img src="https://i.pravatar.cc/100?img=12" alt="User Avatar" onerror="this.src='https://via.placeholder.com/100?text=JP'">
                     </div>
                     <div class="user-details">
                         <h4>Juan Pérez</h4>
                         <p>Productor</p>
                     </div>
-                </div>
-                <div class="user-dropdown">
-                    <ul>
-                        <li><a href="#"><i class="fas fa-user"></i> Perfil</a></li>
-                        <li><a href="#"><i class="fas fa-cog"></i> Configuración</a></li>
-                        <li><a href="#"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
-                    </ul>
                 </div>
             </div>
         </aside>
@@ -125,12 +1023,12 @@
         <!-- Main content -->
         <main class="dashboard-content">
             <!-- Top bar -->
-            <div class="topbar">
+            <div class="topbar" data-aos="fade-down" data-aos-duration="800">
                 <button class="toggle-sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="topbar-title">
-                    Dashboard
+                    Dashboard Inteligente
                 </div>
                 <div class="topbar-actions">
                     <button class="notification-button">
@@ -143,17 +1041,17 @@
                     <div class="parcel-selector-container">
                         <select id="parcel-selector">
                             <option value="all">Todas las parcelas</option>
-                            <option value="parcel1">Parcela 1</option>
-                            <option value="parcel2">Parcela 2</option>
-                            <option value="parcel3">Parcela 3</option>
+                            <option value="parcel1">Parcela Norte</option>
+                            <option value="parcel2">Parcela Sur</option>
+                            <option value="parcel3">Parcela Este</option>
                         </select>
                     </div>
                 </div>
             </div>
 
             <!-- Notification banner -->
-            <div class="notification-banner pulse-animation">
-                <p><i class="fas fa-info-circle"></i> Bienvenido al nuevo dashboard de GeoHarvest. Explora las nuevas características.</p>
+            <div class="notification-banner pulse-animation" data-aos="fade-up" data-aos-duration="800">
+                <p><i class="fas fa-info-circle"></i> Bienvenido al nuevo dashboard de GeoHarvest. Explora las nuevas características y aprovecha al máximo la tecnología.</p>
                 <button class="close"><i class="fas fa-times"></i></button>
             </div>
 
@@ -208,7 +1106,7 @@
 
                     <!-- First row of widgets -->
                     <div class="widgets-row">
-                        <div class="widget medium-widget">
+                        <div class="widget medium-widget" data-aos="fade-up" data-aos-delay="100">
                             <div class="widget-header">
                                 <h3><i class="fas fa-water"></i> Humedad del suelo</h3>
                                 <div class="widget-actions">
@@ -221,7 +1119,7 @@
                             </div>
                         </div>
 
-                        <div class="widget medium-widget">
+                        <div class="widget medium-widget" data-aos="fade-up" data-aos-delay="200">
                             <div class="widget-header">
                                 <h3><i class="fas fa-temperature-high"></i> Temperatura</h3>
                                 <div class="widget-actions">
@@ -237,7 +1135,7 @@
 
                     <!-- Second row of widgets -->
                     <div class="widgets-row">
-                        <div class="widget large-widget">
+                        <div class="widget large-widget" data-aos="fade-up" data-aos-delay="100">
                             <div class="widget-header">
                                 <h3><i class="fas fa-map-marked-alt"></i> Mapa de parcelas</h3>
                                 <div class="widget-actions">
@@ -249,7 +1147,7 @@
                             <div id="crop-map" class="map-container"></div>
                         </div>
 
-                        <div class="widget small-widget">
+                        <div class="widget small-widget" data-aos="fade-up" data-aos-delay="200">
                             <div class="widget-header">
                                 <h3><i class="fas fa-cloud-sun"></i> Clima</h3>
                                 <div class="widget-actions">
@@ -264,7 +1162,7 @@
 
                     <!-- Third row of widgets -->
                     <div class="widgets-row">
-                        <div class="widget medium-widget">
+                        <div class="widget medium-widget" data-aos="fade-up" data-aos-delay="100">
                             <div class="widget-header">
                                 <h3><i class="fas fa-seedling"></i> Nutrientes del suelo</h3>
                                 <div class="widget-actions">
@@ -277,7 +1175,7 @@
                             </div>
                         </div>
 
-                        <div class="widget medium-widget">
+                        <div class="widget medium-widget" data-aos="fade-up" data-aos-delay="200">
                             <div class="widget-header">
                                 <h3><i class="fas fa-satellite"></i> Datos satelitales</h3>
                                 <div class="widget-actions">
@@ -293,7 +1191,7 @@
 
                     <!-- Alerts and Recommendations -->
                     <div class="widgets-row">
-                        <div class="widget medium-widget">
+                        <div class="widget medium-widget" data-aos="fade-up" data-aos-delay="100">
                             <div class="widget-header">
                                 <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
                                 <span class="badge">3</span>
@@ -303,7 +1201,7 @@
                             </div>
                         </div>
 
-                        <div class="widget medium-widget">
+                        <div class="widget medium-widget" data-aos="fade-up" data-aos-delay="200">
                             <div class="widget-header">
                                 <h3><i class="fas fa-brain"></i> Recomendaciones IA</h3>
                                 <span class="badge green">3</span>
@@ -319,28 +1217,28 @@
                 <div id="bank-panel" class="panel-content">
                     <!-- Credit score -->
                     <div class="kpi-cards">
-                        <div class="kpi-card">
+                        <div class="kpi-card hover-lift">
                             <h3>82/100</h3>
                             <p class="kpi-label">Puntuación crediticia</p>
                             <div class="kpi-trend positive">
                                 <i class="fas fa-arrow-up"></i> 5
                             </div>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card hover-lift">
                             <h3>$158,342</h3>
                             <p class="kpi-label">Ingresos mensuales</p>
                             <div class="kpi-trend positive">
                                 <i class="fas fa-arrow-up"></i> 12%
                             </div>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card hover-lift">
                             <h3>$42,500</h3>
                             <p class="kpi-label">Préstamo disponible</p>
                             <div class="kpi-trend positive">
                                 <i class="fas fa-arrow-up"></i> 8%
                             </div>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card hover-lift">
                             <h3>4.2%</h3>
                             <p class="kpi-label">Tasa de interés</p>
                             <div class="kpi-trend positive">
@@ -368,7 +1266,7 @@
                                 <h3><i class="fas fa-money-bill-wave"></i> Oportunidades financieras</h3>
                             </div>
                             <div class="finance-opportunities">
-                                <div class="finance-opportunity">
+                                <div class="finance-opportunity hover-lift">
                                     <div class="opportunity-icon">
                                         <i class="fas fa-seedling"></i>
                                     </div>
@@ -381,7 +1279,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="finance-opportunity">
+                                <div class="finance-opportunity hover-lift">
                                     <div class="opportunity-icon">
                                         <i class="fas fa-tractor"></i>
                                     </div>
@@ -394,6 +1292,30 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="finance-opportunity hover-lift">
+                                    <div class="opportunity-icon">
+                                        <i class="fas fa-handshake"></i>
+                                    </div>
+                                    <div class="opportunity-content">
+                                        <h4>Crédito para expansión</h4>
+                                        <p>Financiamiento a 24 meses con tasas preferenciales</p>
+                                        <div class="opportunity-actions">
+                                            <button class="btn-primary">Solicitar</button>
+                                            <button class="btn-outline">Detalles</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="widgets-row">
+                        <div class="widget full-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-chart-line"></i> Proyecciones financieras</h3>
+                            </div>
+                            <div class="chart-container" style="height: 300px;">
+                                <canvas id="financial-projections-chart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -402,28 +1324,28 @@
                 <!-- Buyer Panel -->
                 <div id="buyer-panel" class="panel-content">
                     <div class="kpi-cards">
-                        <div class="kpi-card">
+                        <div class="kpi-card hover-lift">
                             <h3>152 ton</h3>
                             <p class="kpi-label">Producción estimada</p>
                             <div class="kpi-trend positive">
                                 <i class="fas fa-arrow-up"></i> 8%
                             </div>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card hover-lift">
                             <h3>Jun 2025</h3>
                             <p class="kpi-label">Fecha estimada de cosecha</p>
                             <div class="kpi-trend neutral">
                                 <i class="fas fa-minus"></i> Según lo planeado
                             </div>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card hover-lift">
                             <h3>A+</h3>
                             <p class="kpi-label">Calificación de calidad</p>
                             <div class="kpi-trend positive">
                                 <i class="fas fa-arrow-up"></i> +1
                             </div>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card hover-lift">
                             <h3>$1,250/ton</h3>
                             <p class="kpi-label">Precio estimado</p>
                             <div class="kpi-trend positive">
@@ -438,22 +1360,39 @@
                                 <h3><i class="fas fa-clipboard-check"></i> Certificaciones</h3>
                             </div>
                             <div class="certifications-container">
-                                <div class="certification">
-                                    <img src="assets/cert-organic.png" alt="Certificado Orgánico">
+                                <div class="certification hover-lift">
+                                    <img src="https://via.placeholder.com/64?text=Org" alt="Certificado Orgánico">
                                     <h4>Certificado Orgánico</h4>
                                     <p>Válido hasta: Oct 2025</p>
                                 </div>
-                                <div class="certification">
-                                    <img src="assets/cert-fairtrade.png" alt="Comercio Justo">
+                                <div class="certification hover-lift">
+                                    <img src="https://via.placeholder.com/64?text=Fair" alt="Comercio Justo">
                                     <h4>Comercio Justo</h4>
                                     <p>Válido hasta: Dec 2025</p>
                                 </div>
-                                <div class="certification">
-                                    <img src="assets/cert-sustainable.png" alt="Agricultura Sostenible">
+                                <div class="certification hover-lift">
+                                    <img src="https://via.placeholder.com/64?text=Sust" alt="Agricultura Sostenible">
                                     <h4>Agricultura Sostenible</h4>
                                     <p>Válido hasta: Sep 2025</p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="widget small-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-leaf"></i> Calidad del producto</h3>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="quality-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="widgets-row">
+                        <div class="widget full-widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-truck"></i> Trazabilidad del producto</h3>
+                            </div>
+                            <div id="traceability-map" class="map-container"></div>
                         </div>
                     </div>
                 </div>
@@ -471,16 +1410,16 @@
     <!-- GSAP para animaciones -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     
-    <!-- ScrollTrigger plugin para GSAP (igual que en index) -->
+    <!-- ScrollTrigger plugin para GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
     
-    <!-- Three.js para efectos de fondo (igual que en index) -->
+    <!-- Three.js para efectos de fondo -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     
-    <!-- AOS para animaciones al hacer scroll (igual que en index) -->
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <!-- AOS para animaciones al hacer scroll -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <!-- Vanilla-tilt.js para efectos 3D en hover (igual que en index) -->
+    <!-- Vanilla-tilt.js para efectos 3D en hover -->
     <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.0/dist/vanilla-tilt.min.js"></script>
     
     <!-- Scripts propios -->
