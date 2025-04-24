@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initWeatherWidget();
     setupDarkMode();
     initRealTimeUpdates();
+    loadProducerPanel(); // Añadida la función para cargar el panel del productor
     setupAOSAnimations(); // Añadido para mantener coherencia con index
     setupHoverEffects(); // Añadido para mantener coherencia con index
 });
@@ -910,7 +911,7 @@ function initWeatherWidget() {
                 <span>${day.temp}°C</span>
             `;
             forecastContainer.appendChild(dayElement);
-        });
+        }
     }
     
     // Animar entrada del widget
@@ -1144,4 +1145,113 @@ function showNotification(message, type = 'info') {
             onComplete: () => notification.remove()
         });
     }, 5000);
+}
+
+// Función para cargar los datos del panel del productor
+function loadProducerPanel() {
+    console.log('Cargando el panel del productor...');
+    
+    // Asegurarse de que el panel del productor esté visible por defecto
+    const producerPanel = document.getElementById('producer-panel');
+    if (!producerPanel) {
+        console.error('No se encontró el panel del productor');
+        return;
+    }
+    
+    // Activar el panel del productor por defecto si no está activo
+    if (!producerPanel.classList.contains('active')) {
+        producerPanel.classList.add('active');
+    }
+    
+    // Asegurar que el botón del productor esté activo
+    const producerButton = document.querySelector('[data-panel="producer"]');
+    if (producerButton && !producerButton.classList.contains('active')) {
+        producerButton.classList.add('active');
+    }
+    
+    // Cargar datos del productor desde demo-data.js
+    loadProducerData();
+    
+    // Animar entrada del panel
+    animateProducerPanelEntrance();
+}
+
+// Cargar datos del productor desde el archivo demo-data
+function loadProducerData() {
+    try {
+        // Verificar si tenemos acceso a los datos de demostración
+        if (typeof demoData !== 'undefined' && demoData.producer) {
+            updateProducerDashboard(demoData.producer);
+        } else {
+            // Datos de ejemplo si no se puede cargar demo-data.js
+            const fallbackData = {
+                name: "Juan Rodríguez",
+                farm: "Finca Los Naranjos",
+                crops: ["Maíz", "Frijol", "Café"],
+                parcels: 3,
+                totalArea: 15.4,
+                monthlyIncome: 156000,
+                waterSavings: "18%",
+                yieldIncrease: "12.5%"
+            };
+            updateProducerDashboard(fallbackData);
+        }
+    } catch (error) {
+        console.error('Error al cargar los datos del productor:', error);
+        showNotification('Error al cargar datos del productor', 'error');
+    }
+}
+
+// Actualizar el dashboard del productor con los datos
+function updateProducerDashboard(data) {
+    // Actualizar KPIs
+    updateKpiWithAnimation('Ingresos mensuales', '$' + data.monthlyIncome);
+    updateKpiWithAnimation('Ahorro de agua', data.waterSavings);
+    updateKpiWithAnimation('Aumento en rendimiento', data.yieldIncrease);
+    
+    // Actualizar nombre del productor en el dashboard
+    const producerNameElement = document.getElementById('producer-name');
+    if (producerNameElement) {
+        producerNameElement.textContent = data.name;
+    }
+    
+    // Actualizar nombre de la finca
+    const farmNameElement = document.getElementById('farm-name');
+    if (farmNameElement) {
+        farmNameElement.textContent = data.farm;
+    }
+    
+    // Actualizar selector de parcelas
+    const parcelSelector = document.getElementById('parcel-selector');
+    if (parcelSelector) {
+        // Limpiar opciones existentes
+        parcelSelector.innerHTML = '';
+        
+        // Añadir nuevas opciones basadas en los datos
+        for (let i = 1; i <= data.parcels; i++) {
+            const option = document.createElement('option');
+            option.value = `Parcela ${i}`;
+            option.textContent = `Parcela ${i}`;
+            parcelSelector.appendChild(option);
+        }
+    }
+    
+    console.log('Panel del productor actualizado con éxito');
+}
+
+// Animar entrada del panel del productor
+function animateProducerPanelEntrance() {
+    const producerPanel = document.getElementById('producer-panel');
+    if (!producerPanel) return;
+    
+    const elements = producerPanel.querySelectorAll('.kpi-card, .widget');
+    
+    // Animar entrada de los elementos del panel
+    gsap.from(elements, {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out'
+    });
 }
