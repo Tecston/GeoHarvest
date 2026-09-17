@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "project": {
+    "name": "geoharvest-react",
+    "productType": "Agricultural territorial and operational intelligence",
+    "stack": ["react", "tailwind-v3", "vite"]
+  },
+  "sources": {
+    "tokens": ["app/globals.css", "components/landing/commercial.css"],
+    "components": [],
+    "assets": ["public/images"],
+    "instructions": []
+  },
+  "design": {
+    "colorMode": "light",
+    "colors": {
+      "--ink": {
+        "source": "app/globals.css",
+        "value": "#111311"
+      },
+      "--paper": {
+        "source": "app/globals.css",
+        "value": "#fbfcf9"
+      },
+      "--muted": {
+        "source": "app/globals.css",
+        "value": "#606a61"
+      },
+      "--mint-dark": {
+        "source": "app/globals.css",
+        "value": "#28784a"
+      },
+      "--line": {
+        "source": "app/globals.css",
+        "value": "#e7e9e5"
+      }
+    },
+    "typography": {},
+    "spacing": {},
+    "radius": {},
+    "shadows": {},
+    "motion": {},
+    "density": "unknown"
+  },
+  "components": {
+    "installed": [],
+    "preferredPrimitives": [],
+    "patterns": []
+  },
+  "constraints": {
+    "must": [],
+    "avoid": []
+  },
+  "decisions": [
+    {
+      "decision": "Use a light, editorial product-storytelling system with near-black typography, off-white surfaces, subtle agricultural green accents, generous whitespace, and real field imagery as the primary visual language.",
+      "source": "User brief and 21st.dev pattern review"
+    },
+    {
+      "decision": "Use minimal hero, floating navigation, bento use-case cards, and product showcase patterns adapted to GeoHarvest rather than copying a single component.",
+      "source": "21st.dev public catalog review"
+    },
+    {
+      "decision": "Preserve editorial layout, use the original Figma leaf logo and local photography, reduce landing to eight sections, clearly identify synthetic data, and connect role-specific demo entry.",
+      "source": "GeoHarvest master brief and implementation audit, 2026-09-16"
+    },
+    {
+      "decision": "Commercial refresh: agricultural photo hero, evergreen and lime palette, early role solutions, real product screenshots in accessible tabs, mobile proof and pilot contact. Preserve original logo and label demo data.",
+      "source": "User request and Tecston/GeoHarvest reference, 2026-09-17"
+    }
+  ],
+  "evidence": [
+    {
+      "fact": "design.colorMode:light-and-dark",
+      "source": "app/globals.css"
+    },
+    {
+      "fact": "design.tokens",
+      "source": "app/globals.css"
+    },
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:tailwind-v3",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:vite",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-09-09T18:42:56.889Z"
+}

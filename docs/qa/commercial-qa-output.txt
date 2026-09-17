@@ -1,0 +1,362 @@
+{
+  "url": "http://localhost:5173",
+  "testedAt": "2026-09-17T18:26:47.099Z",
+  "checks": [
+    {
+      "name": "Landing metadata reflects the current product",
+      "passed": true,
+      "details": {
+        "title": "GeoHarvest | Tu campo y tu negocio, más conectados",
+        "language": "es",
+        "description": "Tu campo. Tu negocio. Más conectados. Reúne parcelas, trabajo de campo y oportunidades para producir, financiar y comercializar con GeoHarvest.",
+        "ogTitle": "GeoHarvest | Tu campo y tu negocio, más conectados",
+        "ogDescription": "Una plataforma para agricultores, financiadores y comercializadores. Conoce la experiencia y conversemos sobre tu operación.",
+        "twitterTitle": "GeoHarvest | Tu campo y tu negocio, más conectados"
+      }
+    },
+    {
+      "name": "Three role tabs switch the panel and destination",
+      "passed": true,
+      "details": [
+        "http://localhost:3000/login?role=farmer",
+        "http://localhost:3000/login?role=financier",
+        "http://localhost:3000/login?role=commercial"
+      ]
+    },
+    {
+      "name": "Role tabs support Home, End, arrows and wraparound",
+      "passed": true,
+      "details": [
+        [
+          "Home",
+          "Agricultor"
+        ],
+        [
+          "ArrowRight",
+          "Financiador"
+        ],
+        [
+          "ArrowRight",
+          "Comercializador"
+        ],
+        [
+          "ArrowRight",
+          "Agricultor"
+        ],
+        [
+          "ArrowLeft",
+          "Comercializador"
+        ],
+        [
+          "Home",
+          "Agricultor"
+        ],
+        [
+          "End",
+          "Comercializador"
+        ]
+      ]
+    },
+    {
+      "name": "Role cards lead to the corresponding live platform login",
+      "passed": true,
+      "details": [
+        {
+          "name": "Quiero gestionar mi campo",
+          "href": "http://localhost:3000/login?role=farmer"
+        },
+        {
+          "name": "Quiero explorar proyectos",
+          "href": "http://localhost:3000/login?role=financier"
+        },
+        {
+          "name": "Quiero encontrar producción",
+          "href": "http://localhost:3000/login?role=commercial"
+        }
+      ]
+    },
+    {
+      "name": "FAQ entries open and close",
+      "passed": true,
+      "details": [
+        "¿Qué puedo hacer en la demo?",
+        "¿La información que veo corresponde a campos reales?",
+        "¿Puedo usar GeoHarvest desde mi teléfono?",
+        "¿Cómo empezamos un piloto con mi operación?"
+      ]
+    },
+    {
+      "name": "Same-page anchor destinations exist",
+      "passed": true,
+      "details": [
+        {
+          "name": "Saltar al contenido",
+          "hash": "#main-content",
+          "exists": true
+        },
+        {
+          "name": "Soluciones",
+          "hash": "#use-cases",
+          "exists": true
+        },
+        {
+          "name": "La plataforma",
+          "hash": "#product",
+          "exists": true
+        },
+        {
+          "name": "Cómo funciona",
+          "hash": "#how-it-works",
+          "exists": true
+        },
+        {
+          "name": "Hablemos ",
+          "hash": "#contact",
+          "exists": true
+        },
+        {
+          "name": "Hablar con el equipo ",
+          "hash": "#contact",
+          "exists": true
+        },
+        {
+          "name": "Una plataforma.Conecta la cadena agrícola.",
+          "hash": "#use-cases",
+          "exists": true
+        },
+        {
+          "name": "Soluciones por perfil",
+          "hash": "#use-cases",
+          "exists": true
+        },
+        {
+          "name": "La plataforma",
+          "hash": "#product",
+          "exists": true
+        },
+        {
+          "name": "Cómo funciona",
+          "hash": "#how-it-works",
+          "exists": true
+        },
+        {
+          "name": "Solicitar un piloto",
+          "hash": "#contact",
+          "exists": true
+        }
+      ]
+    },
+    {
+      "name": "Images load without broken sources",
+      "passed": true,
+      "details": 9
+    },
+    {
+      "name": "Mobile menu opens, Escape restores focus, navigation link closes it",
+      "passed": true
+    },
+    {
+      "name": "No horizontal overflow at 320, 390, 768, 1024 and 1440 pixels",
+      "passed": true,
+      "details": [
+        {
+          "viewport": 320,
+          "document": 320,
+          "body": 320,
+          "clippedText": []
+        },
+        {
+          "viewport": 390,
+          "document": 390,
+          "body": 390,
+          "clippedText": []
+        },
+        {
+          "viewport": 768,
+          "document": 768,
+          "body": 768,
+          "clippedText": []
+        },
+        {
+          "viewport": 1024,
+          "document": 1024,
+          "body": 1024,
+          "clippedText": []
+        },
+        {
+          "viewport": 1440,
+          "document": 1440,
+          "body": 1440,
+          "clippedText": []
+        }
+      ]
+    },
+    {
+      "name": "Local account and information pages resolve",
+      "passed": true,
+      "details": [
+        {
+          "destination": "/",
+          "status": 200,
+          "heading": "Tu campo.\nTu negocio.\nMás conectados."
+        },
+        {
+          "destination": "/login",
+          "status": 200,
+          "heading": "Bienvenido a GeoHarvest"
+        },
+        {
+          "destination": "/register",
+          "status": 200,
+          "heading": "Crea tu cuenta"
+        },
+        {
+          "destination": "/privacy",
+          "status": 200,
+          "heading": "Privacidad en esta demostración"
+        },
+        {
+          "destination": "/terms",
+          "status": 200,
+          "heading": "Alcance de uso de la demo"
+        },
+        {
+          "destination": "/forgot-password",
+          "status": 200,
+          "heading": "Recupera tu acceso"
+        }
+      ]
+    },
+    {
+      "name": "Capture desktop, mobile, tablet and hero",
+      "passed": true
+    },
+    {
+      "name": "Mobile experience CTA reaches farmer mobile workspace",
+      "passed": true,
+      "details": {
+        "destination": "http://localhost:3000/login?role=farmer&next=/mobile",
+        "reached": "http://localhost:3000/mobile",
+        "action": "Only selected demo farmer session; no field data changed"
+      }
+    },
+    {
+      "name": "No browser console errors or uncaught page errors",
+      "passed": true
+    }
+  ],
+  "issues": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "imageReport": [
+    {
+      "src": "/images/Logo.png",
+      "loaded": true,
+      "width": 114,
+      "alt": ""
+    },
+    {
+      "src": "/images/commercial/hero-field.webp",
+      "loaded": true,
+      "width": 1608,
+      "alt": "Vista aérea de maquinaria trabajando en un extenso campo de cultivo"
+    },
+    {
+      "src": "/images/agricultores.png",
+      "loaded": true,
+      "width": 343,
+      "alt": "Hortalizas recién cosechadas en un campo"
+    },
+    {
+      "src": "/images/financiadores.png",
+      "loaded": true,
+      "width": 343,
+      "alt": "Dos personas estrechan sus manos junto al cultivo"
+    },
+    {
+      "src": "/images/comercializadores.png",
+      "loaded": true,
+      "width": 343,
+      "alt": "Cosechadora trabajando entre hileras de un cultivo"
+    },
+    {
+      "src": "/images/commercial/platform-commercial.webp",
+      "loaded": true,
+      "width": 1440,
+      "alt": "Captura real de la plataforma GeoHarvest, vista de comercializador, con datos de ejemplo"
+    },
+    {
+      "src": "/images/field-rows.jpg",
+      "loaded": true,
+      "width": 1600,
+      "alt": ""
+    },
+    {
+      "src": "/images/commercial/mobile-field.webp",
+      "loaded": true,
+      "width": 390,
+      "alt": "Captura de la vista móvil de GeoHarvest con parcelas de demostración"
+    },
+    {
+      "src": "/images/Logo.png",
+      "loaded": true,
+      "width": 114,
+      "alt": ""
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "commercial-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "fullPage": true
+    },
+    {
+      "name": "commercial-mobile.png",
+      "width": 390,
+      "height": 844,
+      "fullPage": true
+    },
+    {
+      "name": "commercial-tablet.png",
+      "width": 768,
+      "height": 1024,
+      "fullPage": false
+    },
+    {
+      "name": "commercial-hero.png",
+      "width": 1440,
+      "height": 1000,
+      "fullPage": false
+    },
+    {
+      "name": "commercial-product.png",
+      "viewportWidth": 1440,
+      "viewportHeight": 1500,
+      "selector": "#product"
+    },
+    {
+      "name": "commercial-audiences.png",
+      "viewportWidth": 1440,
+      "viewportHeight": 1500,
+      "selector": "#use-cases"
+    },
+    {
+      "name": "commercial-workflow.png",
+      "viewportWidth": 1440,
+      "viewportHeight": 1500,
+      "selector": "#how-it-works"
+    },
+    {
+      "name": "commercial-mobile-hero.png",
+      "width": 390,
+      "height": 844,
+      "fullPage": false
+    }
+  ],
+  "recheckedAt": "2026-09-17T18:28:12.266Z",
+  "recheckedOnly": [
+    "Mobile experience CTA reaches farmer mobile workspace",
+    "No browser console errors or uncaught page errors"
+  ]
+}
